@@ -1,0 +1,4 @@
+# Cloudflare Pages — publish directory is `public/`
+# No build command needed.
+
+.DS_Store
