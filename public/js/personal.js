@@ -32,6 +32,7 @@
   var T = {
     it: {
       titolo: "Prima di arrivare",
+      benvenuto: "Benvenuto", benvenutoM: "Benvenuto", benvenutoF: "Benvenuta", benvenutoN: "Ciao",
       sotto: "Due cose e sei a posto. Ci servono per legge e per prepararti l'appartamento.",
       codice: "Codice di accesso", codiceNota: "Attivo dal giorno del check-in.",
       eta: "A che ora arrivi?", etaSalva: "Salva orario", etaOk: "Orario salvato",
@@ -52,6 +53,7 @@
     },
     en: {
       titolo: "Before you arrive",
+      benvenuto: "Welcome",
       sotto: "Two things and you're set. We need them by law and to get the flat ready for you.",
       codice: "Access code", codiceNota: "Active from your check-in day.",
       eta: "What time will you arrive?", etaSalva: "Save time", etaOk: "Time saved",
@@ -72,6 +74,7 @@
     },
     es: {
       titolo: "Antes de llegar",
+      benvenuto: "Bienvenido", benvenutoM: "Bienvenido", benvenutoF: "Bienvenida", benvenutoN: "Hola",
       sotto: "Dos cosas y listo. Nos hacen falta por ley y para prepararte el apartamento.",
       codice: "Código de acceso", codiceNota: "Activo desde el día de tu entrada.",
       eta: "¿A qué hora llegas?", etaSalva: "Guardar hora", etaOk: "Hora guardada",
@@ -92,6 +95,7 @@
     },
     fr: {
       titolo: "Avant votre arrivée",
+      benvenuto: "Bienvenue",
       sotto: "Deux choses et c'est bon. Elles nous sont demandées par la loi et pour préparer l'appartement.",
       codice: "Code d'accès", codiceNota: "Actif à partir du jour de votre arrivée.",
       eta: "À quelle heure arrivez-vous ?", etaSalva: "Enregistrer l'heure", etaOk: "Heure enregistrée",
@@ -112,6 +116,7 @@
     },
     de: {
       titolo: "Vor Ihrer Ankunft",
+      benvenuto: "Willkommen",
       sotto: "Zwei Dinge, dann sind Sie fertig. Wir brauchen sie gesetzlich und um die Wohnung vorzubereiten.",
       codice: "Zugangscode", codiceNota: "Ab Ihrem Anreisetag aktiv.",
       eta: "Wann kommen Sie an?", etaSalva: "Uhrzeit speichern", etaOk: "Uhrzeit gespeichert",
@@ -136,6 +141,20 @@
   function fill(s, vals) {
     return String(s).replace(/\{(\w+)\}/g, function (_, k) { return vals[k] != null ? vals[k] : ""; });
   }
+  /** «Benvenuta Sofia». Il genere cambia la parola solo in italiano e spagnolo:
+   *  in inglese, francese e tedesco è invariabile, e il fallback di t() ci
+   *  arriva da solo senza chiavi in più. Genere ignoto → forma neutra
+   *  («Ciao Sofia»), mai la maschile per default: sbagliare il saluto a un
+   *  ospite è peggio che non dargliene uno. Senza nome resta il vecchio titolo,
+   *  che dice cosa deve fare. */
+  function saluto() {
+    var nome = (dati && dati.nome) || "";
+    if (!nome) return t("titolo");
+    var g = (dati && dati.genere) || "";
+    var parola = (g && t("benvenuto" + g.toUpperCase())) || t("benvenutoN") || t("benvenuto");
+    return parola + " " + nome;
+  }
+
   function el(tag, attrs, kids) {
     var n = document.createElement(tag);
     Object.keys(attrs || {}).forEach(function (k) {
@@ -276,7 +295,7 @@
   // ── stati ──────────────────────────────────────────────────────────────
   function overlay() {
     var kids = [
-      el("h2", { text: t("titolo") }),
+      el("h2", { text: saluto() }),
       el("p", { className: "gp-lead", text: t("sotto") }),
       bloccoCodice(), bloccoEta(), bloccoDocumenti(), bloccoImposta(),
     ];
