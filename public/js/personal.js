@@ -173,25 +173,42 @@
     ]);
   }
 
+  /** Niente bottone "salva": l'orario si registra da solo appena l'ospite lo
+   *  sceglie. Un campo solo con un bottone accanto è un passaggio in più che
+   *  qualcuno dimentica di premere, e allora l'orario non arriva mai. */
   function bloccoEta() {
     var msg = el("p", { className: "gp-msg", hidden: "hidden" });
     var input = el("input", { type: "time", min: "15:00", step: "900", value: dati.eta || "" });
-    var btn = el("button", { className: "gp-btn", type: "button", text: t("etaSalva") });
-    btn.addEventListener("click", function () {
-      btn.disabled = true;
+
+    var ultimo = dati.eta || "";
+    function salva() {
+      var v = input.value;
+      if (!v || v === ultimo) return;
+      ultimo = v;
+      msg.hidden = false;
+      msg.className = "gp-msg";
+      msg.textContent = "…";
       api("/eta", {
         method: "POST", headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ eta: input.value }),
+        body: JSON.stringify({ eta: v }),
       }).then(function (r) {
-        msg.hidden = false;
         msg.className = "gp-msg " + (r.ok ? "gp-msg--ok" : "gp-msg--err");
         msg.textContent = r.message || "";
-        btn.disabled = false;
         if (r.ok) carica().then(disegna);
-      }).catch(function () { btn.disabled = false; });
-    });
+        else ultimo = "";            // riprova al prossimo cambio
+      }).catch(function () {
+        msg.className = "gp-msg gp-msg--err";
+        msg.textContent = fill(t("giu"), { tel: (dati && dati.telefono) || "" });
+        ultimo = "";
+      });
+    }
+    // `change` copre desktop e la conferma del selettore su iOS; `blur` prende
+    // il caso in cui l'ospite tocca fuori senza confermare.
+    input.addEventListener("change", salva);
+    input.addEventListener("blur", salva);
+
     return el("div", { className: "gp-card" }, [
-      el("h3", { text: t("eta") }), msg, input, btn,
+      el("h3", { text: t("eta") }), input, msg,
     ]);
   }
 

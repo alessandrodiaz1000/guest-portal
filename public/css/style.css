@@ -1257,17 +1257,26 @@ body.gp-locked { overflow: hidden; }
 .gp-ok { font-size: 0.85rem; color: #15803d; margin: 0.5rem 0 0; }
 .gp-amount { font-size: 2rem; font-weight: 700; line-height: 1; }
 
-.gp-card input[type="time"],
-.gp-card input[type="file"] {
+.gp-card input[type="time"] {
   display: block;
   width: 100%;
+  max-width: 100%;
+  min-width: 0;
   padding: 0.65rem 0.7rem;
-  margin-bottom: 0.7rem;
+  margin-bottom: 0;
   font: inherit;
   border: 1px solid var(--border);
   border-radius: 10px;
   background: var(--surface);
+  /* iOS dà a input[type=time] una larghezza intrinseca che sfonda la card sulla
+     destra: senza questo l'orario esce dal riquadro. */
+  -webkit-appearance: none;
+  appearance: none;
 }
+/* L'input file è nascosto: lo apre il bottone. La regola di prima gli dava
+   display:block e sovrascriveva l'attributo `hidden`, quindi restava visibile
+   il "Scegli file" nativo accanto al bottone vero. */
+.gp-card input[type="file"][hidden] { display: none; }
 .gp-btn {
   width: 100%;
   padding: 0.8rem;
@@ -1307,15 +1316,21 @@ body.gp-locked { overflow: hidden; }
 
 /* Il link per saltare alla guida è deliberatamente piccolo e in fondo: si può
    fare, ma non è la strada principale. */
+/* Il link per saltare alla guida resta appiccicato in fondo allo schermo
+   mentre si scorre: prima stava in coda al contenuto e su un telefono, con
+   codice + orario + documenti + imposta, non lo si raggiungeva mai. Piccolo e
+   defilato ma sempre lì. */
 .gp-skip {
+  position: sticky;
+  bottom: 0;
   display: block;
   width: 100%;
   margin-top: 1.4rem;
-  padding: 0.5rem;
+  padding: 0.9rem 0.5rem calc(var(--safe-bottom) + 0.9rem);
   font: inherit;
   font-size: 0.85rem;
   color: var(--muted);
-  background: none;
+  background: linear-gradient(to bottom, rgba(245,240,232,0), var(--bg) 35%);
   border: 0;
   text-decoration: underline;
   cursor: pointer;

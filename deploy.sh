@@ -30,6 +30,15 @@ mkdir -p "$DEPLOY"
 cp -R "$ROOT/public/." "$DEPLOY/"
 find "$DEPLOY" -name '.DS_Store' -delete
 
+# Cache-busting: GitHub Pages serve css/js con max-age=600, quindi dopo un
+# deploy i browser continuano a usare i file vecchi per dieci minuti e sembra
+# che il fix non sia passato. La marca temporale nel querystring li forza a
+# ricaricare subito. Si applica solo alla COPIA deployata: il sorgente resta
+# pulito e il diff non cambia a ogni pubblicazione.
+STAMP="$(date +%Y%m%d%H%M%S)"
+sed -i '' -E "s|(href=\"css/[a-z-]+\.css)(\?v=[0-9]*)?\"|\1?v=${STAMP}\"|g; s|(src=\"js/[a-z-]+\.js)(\?v=[0-9]*)?\"|\1?v=${STAMP}\"|g" "$DEPLOY/index.html"
+echo "→ cache-busting v=${STAMP}"
+
 cd "$DEPLOY"
 git init -b main
 git add .
