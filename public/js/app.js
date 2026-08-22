@@ -34,7 +34,14 @@
 
   function renderSteps(steps) {
     const ol = el("ol", { className: "steps" });
-    steps.forEach((step) => ol.appendChild(el("li", { html: step })));
+    // Il passo sul codice d'accesso è marcato: con il link personale il codice
+    // è già mostrato nella pagina, e dire "controlla i messaggi Airbnb" mentre
+    // il codice è lì sopra confonde. personal.js lo toglie in quel caso.
+    steps.forEach((step, i) => {
+      const attrs = { html: step };
+      if (i === 2) attrs["data-code-step"] = "1";
+      ol.appendChild(el("li", attrs));
+    });
     return ol;
   }
 
@@ -505,9 +512,18 @@
       className: "lang-toggle",
       type: "button",
       "aria-label": "Switch language",
-      text: c.langLabel,
+      // Mostra la PROSSIMA lingua del ciclo: con 5 lingue un `langLabel` fisso
+      // scritto nel contenuto mentirebbe appena se ne aggiunge una.
+      text: (function () {
+        const ls = Object.keys(window.GUEST_CONTENT);
+        return ls[(ls.indexOf(lang) + 1) % ls.length].toUpperCase();
+      })(),
     });
-    langBtn.addEventListener("click", () => setLang(lang === "it" ? "en" : "it"));
+    // Cicla su TUTTE le lingue caricate (it/en/es/fr/de), non più solo it↔en.
+    langBtn.addEventListener("click", () => {
+      const langs = Object.keys(window.GUEST_CONTENT);
+      setLang(langs[(langs.indexOf(lang) + 1) % langs.length]);
+    });
 
     headerInner.appendChild(menuBtn);
     headerInner.appendChild(nav);
@@ -541,6 +557,12 @@
     root.appendChild(main);
     root.appendChild(footer);
     root.appendChild(bottomNav);
+
+    // La parte personale (personal.js) si aggancia qui: la guida si ridisegna a
+    // ogni cambio lingua e il blocco ospite deve seguirla. Va notificato PRIMA
+    // degli effetti di scroll: se quelli falliscono (browser senza matchMedia,
+    // estensioni, jsdom) l'ospite deve comunque vedere la sua parte.
+    document.dispatchEvent(new CustomEvent("guide:rendered", { detail: { lang } }));
 
     bindScrollEffects();
   }

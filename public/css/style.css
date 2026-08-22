@@ -1199,3 +1199,153 @@ body.menu-open .mobile-nav { display: block; }
   .reveal, .scroll-gallery__slide, .hero__img { transition: none !important; transform: none !important; }
   .reveal, .scroll-gallery__slide { opacity: 1; }
 }
+
+/* ─────────────────────────────────────────────────────────────────────────
+   Parte personale dell'ospite (personal.js) — visibile solo con ?t=<token>.
+   Usa gli stessi token cromatici della guida: deve sembrare la stessa cosa,
+   non un pezzo incollato.
+   ───────────────────────────────────────────────────────────────────────── */
+
+/* Mentre la schermata personale è aperta la guida non deve scorrere sotto */
+body.gp-locked { overflow: hidden; }
+
+.gp-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  overflow-y: auto;
+  background: var(--bg);
+  padding: calc(var(--safe-top) + 1.5rem) 1.1rem calc(var(--safe-bottom) + 2.5rem);
+  -webkit-overflow-scrolling: touch;
+}
+.gp-overlay-inner { max-width: 34rem; margin: 0 auto; }
+.gp-overlay h2 {
+  font-family: var(--font-display);
+  font-size: 2rem;
+  line-height: 1.15;
+  margin: 0 0 0.4rem;
+}
+.gp-lead { color: var(--muted); margin: 0 0 1.5rem; line-height: 1.55; }
+
+.gp-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.15rem;
+  margin-bottom: 0.9rem;
+}
+.gp-card h3 {
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: var(--muted);
+  margin: 0 0 0.75rem;
+}
+.gp-card--pay { border-color: var(--accent); background: var(--accent-soft); }
+
+.gp-code {
+  font-size: 2.4rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+  padding: 0.6rem 0;
+  background: var(--bg);
+  border-radius: 10px;
+}
+.gp-note { font-size: 0.85rem; color: var(--muted); line-height: 1.5; margin: 0.5rem 0 0; }
+.gp-ok { font-size: 0.85rem; color: #15803d; margin: 0.5rem 0 0; }
+.gp-amount { font-size: 2rem; font-weight: 700; line-height: 1; }
+
+.gp-card input[type="time"],
+.gp-card input[type="file"] {
+  display: block;
+  width: 100%;
+  padding: 0.65rem 0.7rem;
+  margin-bottom: 0.7rem;
+  font: inherit;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--surface);
+}
+.gp-btn {
+  width: 100%;
+  padding: 0.8rem;
+  font: inherit;
+  font-weight: 600;
+  color: #fff;
+  background: var(--dark);
+  border: 0;
+  border-radius: 10px;
+  cursor: pointer;
+}
+.gp-btn:disabled { opacity: 0.45; cursor: default; }
+.gp-btn--ghost { color: var(--text); background: var(--surface); border: 1px solid var(--border); }
+
+.gp-msg { font-size: 0.85rem; padding: 0.6rem 0.7rem; border-radius: 9px; margin: 0 0 0.7rem; line-height: 1.45; }
+.gp-msg--ok { background: #dcfce7; color: #14532d; }
+.gp-msg--err { background: #fee2e2; color: #7f1d1d; }
+
+.gp-pay { list-style: none; padding: 0; margin: 0.75rem 0 0; }
+.gp-pay li {
+  display: flex; justify-content: space-between; gap: 0.7rem; flex-wrap: wrap;
+  padding: 0.6rem 0; border-top: 1px solid rgba(0,0,0,0.08); font-size: 0.9rem;
+}
+.gp-pay b { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); }
+.gp-pay code { font-family: ui-monospace, Menlo, monospace; font-size: 0.82rem; word-break: break-all; }
+
+/* Il link per saltare alla guida è deliberatamente piccolo e in fondo: si può
+   fare, ma non è la strada principale. */
+.gp-skip {
+  display: block;
+  width: 100%;
+  margin-top: 1.4rem;
+  padding: 0.5rem;
+  font: inherit;
+  font-size: 0.85rem;
+  color: var(--muted);
+  background: none;
+  border: 0;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+/* Barra sticky: resta finché i dati non ci sono (o l'imposta non è confermata) */
+.gp-bar {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 150;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.8rem;
+  padding: calc(var(--safe-top) + 0.6rem) 1rem 0.6rem;
+  font-size: 0.88rem;
+  font-weight: 500;
+  color: #fff;
+  background: var(--dark);
+}
+.gp-bar--pay { background: var(--accent); }
+.gp-bar--err { background: #7f1d1d; font-weight: 400; }
+.gp-bar-btn {
+  flex-shrink: 0;
+  padding: 0.4rem 0.9rem;
+  font: inherit;
+  font-weight: 600;
+  color: var(--dark);
+  background: #fff;
+  border: 0;
+  border-radius: 999px;
+  cursor: pointer;
+}
+body:has(.gp-bar) .site-header { top: 2.6rem; }
+
+/* Innesti dentro la guida (solo con token) */
+.gp-code-inline {
+  display: flex; align-items: center; justify-content: space-between; gap: 1rem;
+  margin-top: 1rem; padding: 0.9rem 1.1rem;
+  background: var(--accent-soft); border-radius: 12px;
+}
+.gp-code-inline span { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.07em; color: var(--muted); }
+.gp-code-inline strong { font-size: 1.5rem; letter-spacing: 0.12em; font-variant-numeric: tabular-nums; }
+.gp-eta-inline { margin-top: 0.9rem; font-size: 0.9rem; color: var(--muted); }
