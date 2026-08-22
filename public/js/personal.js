@@ -46,6 +46,7 @@
       ospiteN: "Ospite {n}", docCambia: "Cambia", docRicevuto: "Ricevuto",
       docInvia: "Invia documenti", docInviaN: "Invia {n} documenti", docInvia1: "Invia 1 documento",
       docInviando: "Invio in corso…", docAggiungi: "Aggiungi un altro ospite", docProgresso: "{n} di {tot}",
+      docQuante: "Quante persone in questa foto?", docMeno: "Uno in meno", docPiu: "Uno in più",
       docContando: "Controllo…", docTrovati1: "1 documento", docTrovatiN: "{n} documenti",
       docMancano1: "Ne manca ancora 1", docMancanoN: "Ne mancano ancora {n}", docTuttiOk: "Ci sono tutti",
       docAggiungiFoto: "Aggiungi una foto", docRimuovi: "Togli",
@@ -74,6 +75,7 @@
       ospiteN: "Guest {n}", docCambia: "Change", docRicevuto: "Received",
       docInvia: "Send documents", docInviaN: "Send {n} documents", docInvia1: "Send 1 document",
       docInviando: "Sending…", docAggiungi: "Add another guest", docProgresso: "{n} of {tot}",
+      docQuante: "How many people in this photo?", docMeno: "One fewer", docPiu: "One more",
       docContando: "Checking…", docTrovati1: "1 document", docTrovatiN: "{n} documents",
       docMancano1: "1 still missing", docMancanoN: "{n} still missing", docTuttiOk: "All there",
       docAggiungiFoto: "Add a photo", docRimuovi: "Remove",
@@ -102,6 +104,7 @@
       ospiteN: "Huésped {n}", docCambia: "Cambiar", docRicevuto: "Recibido",
       docInvia: "Enviar documentos", docInviaN: "Enviar {n} documentos", docInvia1: "Enviar 1 documento",
       docInviando: "Enviando…", docAggiungi: "Añadir otro huésped", docProgresso: "{n} de {tot}",
+      docQuante: "¿Cuántas personas hay en esta foto?", docMeno: "Uno menos", docPiu: "Uno más",
       docContando: "Comprobando…", docTrovati1: "1 documento", docTrovatiN: "{n} documentos",
       docMancano1: "Falta 1", docMancanoN: "Faltan {n}", docTuttiOk: "Están todos",
       docAggiungiFoto: "Añadir una foto", docRimuovi: "Quitar",
@@ -130,6 +133,7 @@
       ospiteN: "Voyageur {n}", docCambia: "Modifier", docRicevuto: "Reçu",
       docInvia: "Envoyer les documents", docInviaN: "Envoyer {n} documents", docInvia1: "Envoyer 1 document",
       docInviando: "Envoi en cours…", docAggiungi: "Ajouter un voyageur", docProgresso: "{n} sur {tot}",
+      docQuante: "Combien de personnes sur cette photo ?", docMeno: "Un de moins", docPiu: "Un de plus",
       docContando: "Vérification…", docTrovati1: "1 document", docTrovatiN: "{n} documents",
       docMancano1: "Il en manque 1", docMancanoN: "Il en manque {n}", docTuttiOk: "Tout y est",
       docAggiungiFoto: "Ajouter une photo", docRimuovi: "Retirer",
@@ -158,6 +162,7 @@
       ospiteN: "Gast {n}", docCambia: "Ändern", docRicevuto: "Erhalten",
       docInvia: "Dokumente senden", docInviaN: "{n} Dokumente senden", docInvia1: "1 Dokument senden",
       docInviando: "Wird gesendet…", docAggiungi: "Weiteren Gast hinzufügen", docProgresso: "{n} von {tot}",
+      docQuante: "Wie viele Personen sind auf diesem Foto?", docMeno: "Eine weniger", docPiu: "Eine mehr",
       docContando: "Prüfung…", docTrovati1: "1 Dokument", docTrovatiN: "{n} Dokumente",
       docMancano1: "Es fehlt noch 1", docMancanoN: "Es fehlen noch {n}", docTuttiOk: "Alle da",
       docAggiungiFoto: "Foto hinzufügen", docRimuovi: "Entfernen",
@@ -334,6 +339,28 @@
         : fill(t("docInviaN"), { n: n });
     }
 
+    /** Il ± accanto alla foto. Il rilevatore propone, l'ospite corregge.
+     *  Serve perché nessun rilevatore azzecca ogni documento di ogni paese —
+     *  misurato: un passaporto francese contato 3, due carte turche contate 1 —
+     *  mentre l'ospite la risposta ce l'ha sotto gli occhi. Il numero corretto
+     *  viaggia con l'upload, e sulla scheda restano entrambi (suo e nostro),
+     *  così le divergenze dicono dove il rilevatore va tarato. */
+    function passo(f) {
+      var meno = el("button", { className: "gp-passo", type: "button", text: "−",
+                                "aria-label": t("docMeno") });
+      var piu = el("button", { className: "gp-passo", type: "button", text: "+",
+                               "aria-label": t("docPiu") });
+      meno.disabled = f.n <= 1;
+      piu.disabled = f.n >= 6;              // stesso tetto del server
+      meno.addEventListener("click", function () {
+        if (f.n > 1) { f.n--; f.corretto = true; ridisegna(); }
+      });
+      piu.addEventListener("click", function () {
+        if (f.n < 6) { f.n++; f.corretto = true; ridisegna(); }
+      });
+      return el("div", { className: "gp-passi" }, [meno, piu]);
+    }
+
     function riga(f) {
       var quanti = f.n === null ? t("docContando")
         : f.n === 1 ? t("docTrovati1")
@@ -354,6 +381,7 @@
           el("span", { className: "gp-foto-n" + (f.n === null ? " gp-foto-n--wait" : ""),
                        text: quanti }),
         ]),
+        f.n === null ? null : passo(f),    // el() salta i figli falsi
         togli,
       ]);
     }
@@ -361,6 +389,9 @@
     function ridisegna() {
       lista.innerHTML = "";
       foto.forEach(function (f) { lista.appendChild(riga(f)); });
+      if (foto.some(function (f) { return f.n !== null; })) {
+        lista.appendChild(el("p", { className: "gp-note gp-quante", text: t("docQuante") }));
+      }
       lista.appendChild(aggiungi);
       disegnaBarre();
       aggiornaInvia();
@@ -409,6 +440,7 @@
         catena = catena.then(function () {
           var fd = new FormData();
           fd.append("file", f.file);
+          if (f.n) fd.append("dichiarati", String(f.n));
           return api("/upload", { method: "POST", body: fd }).then(function (r) {
             if (r && r.ok) ok++;
             else errore = (r && r.message) || errore;

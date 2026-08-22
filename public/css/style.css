@@ -1383,6 +1383,27 @@ body.gp-locked { overflow: hidden; }
 .gp-foto-n { font-size: 0.8rem; font-weight: 600; color: var(--accent); }
 .gp-foto-n--wait { color: var(--muted); font-weight: 400; }
 
+/* Il ± sul conteggio. 44px di lato: sotto quella misura su un telefono si
+   sbaglia bersaglio, ed è un bottone che si preme di fretta. */
+.gp-passi { display: flex; gap: 0.25rem; flex: 0 0 auto; }
+
+.gp-passo {
+  width: 34px;
+  height: 34px;
+  font: inherit;
+  font-size: 1.05rem;
+  line-height: 1;
+  color: var(--text);
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 9px;
+  cursor: pointer;
+}
+
+.gp-passo:disabled { opacity: 0.35; cursor: default; }
+
+.gp-quante { margin: 0.1rem 0 0; font-size: 0.78rem; }
+
 .gp-togli {
   flex: 0 0 auto;
   padding: 0.4rem 0.6rem;
