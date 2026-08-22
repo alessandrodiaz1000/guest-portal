@@ -1243,18 +1243,7 @@ body.gp-locked { overflow: hidden; }
 }
 .gp-card--pay { border-color: var(--accent); background: var(--accent-soft); }
 
-.gp-code {
-  font-size: 2.4rem;
-  font-weight: 700;
-  letter-spacing: 0.14em;
-  text-align: center;
-  font-variant-numeric: tabular-nums;
-  padding: 0.6rem 0;
-  background: var(--bg);
-  border-radius: 10px;
-}
 .gp-note { font-size: 0.85rem; color: var(--muted); line-height: 1.5; margin: 0.5rem 0 0; }
-.gp-ok { font-size: 0.85rem; color: #15803d; margin: 0.5rem 0 0; }
 .gp-amount { font-size: 2rem; font-weight: 700; line-height: 1; }
 
 .gp-card input[type="time"] {
@@ -1363,6 +1352,30 @@ body.gp-locked { overflow: hidden; }
   border: 1px solid var(--border);
   border-radius: 12px;
   background: var(--surface);
+}
+
+/* L'anteprima del documento. Le dimensioni sono OBBLIGATORIE: senza, il
+   browser rende la foto alla sua dimensione naturale — una foto da telefono è
+   diversi migliaia di pixel e copre tutta la pagina. `min-width:0` sul flex
+   accanto, altrimenti il nome del file lungo spingerebbe fuori il resto. */
+.gp-thumb {
+  width: 46px;
+  height: 46px;
+  flex: 0 0 46px;
+  object-fit: cover;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: var(--bg);
+}
+
+.gp-thumb--file {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: var(--muted);
 }
 
 .gp-foto-info { display: flex; flex-direction: column; min-width: 0; flex: 1; }
