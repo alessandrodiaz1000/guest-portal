@@ -1314,6 +1314,31 @@ body.gp-locked { overflow: hidden; }
 .gp-pay em { display: block; margin-top: 0.15rem; font-style: normal; font-size: 0.82rem; color: var(--muted); }
 .gp-pay a { display: block; word-break: break-all; }
 
+/* Una barra per ospite: si riempie quando il Mini ha RICONOSCIUTO il suo
+   documento, non quando è arrivato un file. Due passaporti in una foto sola
+   riempiono due barre. */
+.gp-progresso { display: flex; align-items: center; gap: 0.7rem; margin: 1rem 0 0.2rem; }
+
+.gp-barre { display: flex; gap: 0.3rem; flex: 1; }
+
+.gp-barra {
+  flex: 1;
+  height: 6px;
+  border-radius: 999px;
+  background: var(--border);
+  transition: background 0.25s;
+}
+
+.gp-barra--on { background: var(--accent); }
+
+.gp-progresso-lbl {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+  flex: 0 0 auto;
+}
+
 /* Un riquadro per ospite. Il bordo tratteggiato dice "qui manca qualcosa"
    senza bisogno di scriverlo; diventa pieno quando il file è stato scelto. */
 .gp-slots { display: grid; gap: 0.6rem; margin: 0.9rem 0; }
@@ -1330,7 +1355,6 @@ body.gp-locked { overflow: hidden; }
 }
 
 .gp-slot--pieno { border-style: solid; border-color: var(--accent); background: var(--surface); }
-.gp-slot--ok { border-style: solid; opacity: 0.7; }
 
 .gp-slot-lbl {
   font-size: 0.8rem;
@@ -1340,8 +1364,6 @@ body.gp-locked { overflow: hidden; }
   color: var(--muted);
   flex: 0 0 auto;
 }
-
-.gp-slot-ok { font-size: 0.85rem; color: #15803d; margin-left: auto; }
 
 /* L'anteprima è il punto della modifica: l'ospite deve VEDERE cosa sta per
    mandare prima che parta, non scoprirlo dopo. */
@@ -1377,7 +1399,7 @@ body.gp-locked { overflow: hidden; }
 }
 
 .gp-slot-btn { width: auto; flex: 0 0 auto; padding: 0.5rem 0.9rem; font-size: 0.85rem; }
-.gp-slot--pieno .gp-slot-btn, .gp-slot--ok .gp-slot-btn { margin-left: 0; }
+.gp-slot--pieno .gp-slot-btn { margin-left: 0; }
 
 .gp-piu {
   padding: 0.6rem;

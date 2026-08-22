@@ -45,7 +45,7 @@
       docRicevuti: "{n} ricevuti",
       ospiteN: "Ospite {n}", docCambia: "Cambia", docRicevuto: "Ricevuto",
       docInvia: "Invia documenti", docInviaN: "Invia {n} documenti", docInvia1: "Invia 1 documento",
-      docInviando: "Invio in corso…", docAggiungi: "Aggiungi un altro ospite",
+      docInviando: "Invio in corso…", docAggiungi: "Aggiungi un altro ospite", docProgresso: "{n} di {tot}",
       salta: "Vai direttamente alla guida",
       barraManca: "Mancano i tuoi dati",
       barraApri: "Completa",
@@ -70,7 +70,7 @@
       docRicevuti: "{n} received",
       ospiteN: "Guest {n}", docCambia: "Change", docRicevuto: "Received",
       docInvia: "Send documents", docInviaN: "Send {n} documents", docInvia1: "Send 1 document",
-      docInviando: "Sending…", docAggiungi: "Add another guest",
+      docInviando: "Sending…", docAggiungi: "Add another guest", docProgresso: "{n} of {tot}",
       salta: "Go straight to the guide",
       barraManca: "Your details are missing",
       barraApri: "Complete",
@@ -95,7 +95,7 @@
       docRicevuti: "{n} recibidos",
       ospiteN: "Huésped {n}", docCambia: "Cambiar", docRicevuto: "Recibido",
       docInvia: "Enviar documentos", docInviaN: "Enviar {n} documentos", docInvia1: "Enviar 1 documento",
-      docInviando: "Enviando…", docAggiungi: "Añadir otro huésped",
+      docInviando: "Enviando…", docAggiungi: "Añadir otro huésped", docProgresso: "{n} de {tot}",
       salta: "Ir directamente a la guía",
       barraManca: "Faltan tus datos",
       barraApri: "Completar",
@@ -120,7 +120,7 @@
       docRicevuti: "{n} reçus",
       ospiteN: "Voyageur {n}", docCambia: "Modifier", docRicevuto: "Reçu",
       docInvia: "Envoyer les documents", docInviaN: "Envoyer {n} documents", docInvia1: "Envoyer 1 document",
-      docInviando: "Envoi en cours…", docAggiungi: "Ajouter un voyageur",
+      docInviando: "Envoi en cours…", docAggiungi: "Ajouter un voyageur", docProgresso: "{n} sur {tot}",
       salta: "Aller directement au guide",
       barraManca: "Vos informations manquent",
       barraApri: "Compléter",
@@ -145,7 +145,7 @@
       docRicevuti: "{n} erhalten",
       ospiteN: "Gast {n}", docCambia: "Ändern", docRicevuto: "Erhalten",
       docInvia: "Dokumente senden", docInviaN: "{n} Dokumente senden", docInvia1: "1 Dokument senden",
-      docInviando: "Wird gesendet…", docAggiungi: "Weiteren Gast hinzufügen",
+      docInviando: "Wird gesendet…", docAggiungi: "Weiteren Gast hinzufügen", docProgresso: "{n} von {tot}",
       salta: "Direkt zum Guide",
       barraManca: "Ihre Angaben fehlen",
       barraApri: "Vervollständigen",
@@ -243,53 +243,61 @@
     ]);
   }
 
-  /** Un riquadro per ospite, con anteprima, e un invio ESPLICITO in fondo.
+  /** Una barra per ospite, riempita da quanti DOCUMENTI sono arrivati — non da
+   *  quanti file. Sotto, un riquadro (con anteprima e invio esplicito) per ogni
+   *  ospite che manca ancora.
    *
-   *  Prima l'upload partiva da solo al `change` dell'input: bastava un tocco
-   *  sbagliato nella galleria e sul Mini arrivava una foto a caso, senza modo
-   *  di annullarla e con la scheda già segnata come "documenti caricati". Ora
-   *  l'ospite sceglie, VEDE cosa ha scelto, e solo premendo «Invia documenti»
-   *  parte qualcosa.
+   *  Il conteggio lo fa il Mini con l'OCR al momento del caricamento: una foto
+   *  con due passaporti aperti riempie due barre. Era l'unico modo di pretendere
+   *  il documento di tutti senza pretendere un file per ciascuno — che è un
+   *  gesto che nessuno fa: si fotografano i due passaporti insieme e si manda
+   *  quella.
    *
-   *  Il numero di riquadri viene da `ospitiTotali` (adulti + minori). Se la
-   *  scheda non lo sa — succede sulle prenotazioni ricostruite dal reconcile —
-   *  si parte da uno e l'ospite ne aggiunge quanti gliene servono: meglio un
-   *  riquadro in meno che dirgli il numero sbagliato.
+   *  L'invio resta esplicito. Prima partiva da solo al `change` dell'input:
+   *  bastava un tocco sbagliato nella galleria e sul Mini arrivava una foto a
+   *  caso, senza modo di annullarla.
    */
   function bloccoDocumenti() {
     var msg = el("p", { className: "gp-msg", hidden: "hidden" });
-    var totaleNoto = dati.ospitiTotali || 0;
-    var nSlot = totaleNoto || 1;
-    var gia = Math.min(dati.documenti || 0, nSlot);   // già sul Mini
-    var scelti = {};                                  // indice riquadro → File
-    var urls = {};                                    // objectURL da revocare
+    var attesi = dati.ospitiTotali || 0;          // 0 = la scheda non lo sa
+    var nBarre = attesi || 1;
+    var pieni = Math.min(dati.documentiRiconosciuti || 0, nBarre);
+    var scelti = {};                              // indice riquadro → File
+    var urls = {};                                // objectURL da revocare
 
     var lista = el("div", { className: "gp-slots" });
+    var progresso = el("div", { className: "gp-progresso" });
     var invia = el("button", { className: "gp-btn", type: "button" });
 
     function aggiornaInvia() {
       var n = Object.keys(scelti).length;
       invia.disabled = n === 0;
-      // «Invia 1 documenti» si legge male: il singolare è una chiave a sé,
-      // non un plurale costruito a mano, perché in tedesco il numero va prima.
+      // «Invia 1 documenti» si legge male, e il singolare è una chiave a sé
+      // perché in tedesco il numero va prima del sostantivo.
       invia.textContent = !n ? t("docInvia")
         : n === 1 ? t("docInvia1")
         : fill(t("docInviaN"), { n: n });
     }
 
+    function disegnaBarre() {
+      progresso.innerHTML = "";
+      var strip = el("div", { className: "gp-barre" });
+      for (var i = 0; i < nBarre; i++) {
+        strip.appendChild(el("span", {
+          className: "gp-barra" + (i < pieni ? " gp-barra--on" : ""),
+        }));
+      }
+      progresso.appendChild(strip);
+      progresso.appendChild(el("span", { className: "gp-progresso-lbl",
+        text: fill(t("docProgresso"), { n: pieni, tot: nBarre }) }));
+    }
+
+    /** `i` è l'indice della barra che questo riquadro andrà a riempire, così
+     *  l'etichetta segue la numerazione che l'ospite vede sopra. */
     function riquadro(i) {
       var box = el("div", { className: "gp-slot" }, [
         el("span", { className: "gp-slot-lbl", text: fill(t("ospiteN"), { n: i + 1 }) }),
       ]);
-      // I documenti già ricevuti non sono associati a un ospite preciso (il
-      // server tiene solo il conteggio): si marcano i primi riquadri, che è
-      // quanto basta per far vedere che manca ancora qualcosa.
-      if (i < gia) {
-        box.className = "gp-slot gp-slot--ok";
-        box.appendChild(el("span", { className: "gp-slot-ok", text: "✓ " + t("docRicevuto") }));
-        return box;
-      }
-
       var file = el("input", { type: "file", accept: "image/*,application/pdf", hidden: "hidden" });
       var prev = el("div", { className: "gp-slot-prev" });
       var btn = el("button", { className: "gp-btn gp-btn--ghost gp-slot-btn", type: "button",
@@ -322,10 +330,14 @@
 
     function disegnaSlot() {
       lista.innerHTML = "";
-      for (var i = 0; i < nSlot; i++) lista.appendChild(riquadro(i));
-      if (!totaleNoto) {
+      // Un riquadro per ogni barra ancora vuota; almeno uno, altrimenti chi ha
+      // caricato una foto che l'OCR non ha capito resterebbe senza modo di
+      // aggiungerne un'altra.
+      var da = Math.max(nBarre - pieni, 1);
+      for (var k = 0; k < da; k++) lista.appendChild(riquadro(pieni + k));
+      if (!attesi) {
         var piu = el("button", { className: "gp-piu", type: "button", text: t("docAggiungi") });
-        piu.addEventListener("click", function () { nSlot++; disegnaSlot(); });
+        piu.addEventListener("click", function () { nBarre++; disegna_(); });
         lista.appendChild(piu);
       }
     }
@@ -337,8 +349,8 @@
       invia.textContent = t("docInviando");
       var ok = 0, errore = "";
       // Uno alla volta, non in parallelo: il server ha un rate limit per IP e
-      // una raffica di POST si prenderebbe un 429 a metà invio, lasciando
-      // l'ospite senza sapere quali documenti sono passati.
+      // una raffica si prenderebbe un 429 a metà, lasciando l'ospite senza
+      // sapere quali documenti sono passati.
       var catena = Promise.resolve();
       indici.forEach(function (i) {
         catena = catena.then(function () {
@@ -360,7 +372,7 @@
           msg.className = "gp-msg gp-msg--err";
           msg.textContent = errore || fill(t("giu"), { tel: (dati && dati.telefono) || "" });
         }
-        carica().then(disegna);
+        carica().then(disegna);          // le barre si riempiono col conteggio nuovo
       }).catch(function () {
         msg.hidden = false;
         msg.className = "gp-msg gp-msg--err";
@@ -369,14 +381,18 @@
       });
     });
 
-    disegnaSlot();
+    // Barre e riquadri devono restare d'accordo: aggiungere un ospite cambia
+    // entrambi, e ridisegnarne uno solo lasciava 1 barra con 2 riquadri sotto.
+    function disegna_() { disegnaBarre(); disegnaSlot(); }
+
+    disegna_();
     aggiornaInvia();
 
     var kids = [el("h3", { text: t("doc") }), el("p", { className: "gp-note", text: t("docNota") })];
-    if (totaleNoto) {
-      kids.push(el("p", { className: "gp-note", text: fill(t("docTutti"), { n: totaleNoto }) }));
+    if (attesi) {
+      kids.push(el("p", { className: "gp-note", text: fill(t("docTutti"), { n: attesi }) }));
     }
-    kids.push(lista, msg, invia);
+    kids.push(progresso, lista, msg, invia);
     return el("div", { className: "gp-card" }, kids);
   }
 
