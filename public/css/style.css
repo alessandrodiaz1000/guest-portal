@@ -1314,22 +1314,91 @@ body.gp-locked { overflow: hidden; }
 .gp-pay em { display: block; margin-top: 0.15rem; font-style: normal; font-size: 0.82rem; color: var(--muted); }
 .gp-pay a { display: block; word-break: break-all; }
 
-/* Il link per saltare alla guida è deliberatamente piccolo e in coda al
-   contenuto: si può fare, ma non è la strada principale. Niente sticky: una
-   barra sempre a schermo era un elemento fisso in più su una pagina che ne ha
-   già. `background:none` perché è un <button>, che di suo avrebbe il grigio. */
-.gp-skip {
-  display: block;
-  width: 100%;
-  margin-top: 1.4rem;
-  padding: 0.9rem 0.5rem calc(var(--safe-bottom) + 0.9rem);
+/* Un riquadro per ospite. Il bordo tratteggiato dice "qui manca qualcosa"
+   senza bisogno di scriverlo; diventa pieno quando il file è stato scelto. */
+.gp-slots { display: grid; gap: 0.6rem; margin: 0.9rem 0; }
+
+.gp-slot {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  flex-wrap: wrap;
+  padding: 0.7rem 0.8rem;
+  border: 1px dashed var(--border);
+  border-radius: 12px;
+  background: var(--bg);
+}
+
+.gp-slot--pieno { border-style: solid; border-color: var(--accent); background: var(--surface); }
+.gp-slot--ok { border-style: solid; opacity: 0.7; }
+
+.gp-slot-lbl {
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--muted);
+  flex: 0 0 auto;
+}
+
+.gp-slot-ok { font-size: 0.85rem; color: #15803d; margin-left: auto; }
+
+/* L'anteprima è il punto della modifica: l'ospite deve VEDERE cosa sta per
+   mandare prima che parta, non scoprirlo dopo. */
+.gp-slot-prev { display: flex; align-items: center; gap: 0.55rem; margin-left: auto; min-width: 0; }
+
+.gp-thumb {
+  width: 46px;
+  height: 46px;
+  object-fit: cover;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  flex: 0 0 auto;
+}
+
+.gp-thumb--file {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: var(--muted);
+}
+
+.gp-slot-nome {
+  font-size: 0.78rem;
+  color: var(--muted);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 9rem;
+}
+
+.gp-slot-btn { width: auto; flex: 0 0 auto; padding: 0.5rem 0.9rem; font-size: 0.85rem; }
+.gp-slot--pieno .gp-slot-btn, .gp-slot--ok .gp-slot-btn { margin-left: 0; }
+
+.gp-piu {
+  padding: 0.6rem;
   font: inherit;
   font-size: 0.85rem;
   color: var(--muted);
   background: none;
-  border: 0;
-  text-decoration: underline;
+  border: 1px dashed var(--border);
+  border-radius: 12px;
   cursor: pointer;
+}
+
+/* Il bottone grande in fondo alla schermata personale: unica via verso la
+   guida, ed è anche l'unico posto dove l'ospite trova il codice d'accesso. */
+.gp-istruzioni {
+  margin-top: 1.6rem;
+  padding: 1.05rem;
+  font-size: 1rem;
+  background: var(--surface);
+  color: var(--text);
+  border: 1px solid var(--text);
 }
 
 /* Barra sticky: resta finché i dati non ci sono (o l'imposta non è confermata) */

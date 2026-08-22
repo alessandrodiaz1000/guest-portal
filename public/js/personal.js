@@ -7,7 +7,8 @@
  *
  * Stati, nell'ordine in cui li vive l'ospite:
  *   1. dati incompleti  → schermata personale a tutto schermo, la guida sta
- *                         dietro. In fondo un link piccolo per saltarla.
+ *                         dietro: prima le domande (orario, documenti, imposta),
+ *                         in fondo il bottone per le istruzioni di check-in.
  *   2. guida aperta ma  → barra sticky in alto che ricorda cosa manca e
  *      dati incompleti    riapre la schermata.
  *   3. tutto mandato    → la parte personale sparisce; l'orario scelto compare
@@ -33,14 +34,18 @@
     it: {
       titolo: "Prima di arrivare",
       benvenuto: "Benvenuto", benvenutoM: "Benvenuto", benvenutoF: "Benvenuta", benvenutoN: "Ciao",
-      sotto: "Due cose e sei a posto. Ci servono per legge e per prepararti l'appartamento.",
+      sotto: "Grazie ancora per aver scelto Nineteen Milano. Abbiamo bisogno giusto di qualche informazione per procedere con il check-in.",
+      istruzioni: "Vedi istruzioni di check-in",
       codice: "Codice di accesso", codiceNota: "Attivo dal giorno del check-in.",
       eta: "A che ora arrivi?", etaSalva: "Salva orario", etaOk: "Orario salvato",
       doc: "Documenti d'identità",
-      docNota: "La legge italiana ci obbliga a comunicare i dati di ogni ospite alla Questura.",
+      docNota: "Per adempiere alla legge italiana siamo obbligati a comunicare alla Questura i dati di ogni ospite che soggiornerà presso la struttura. Vi chiediamo gentilmente di caricare l'immagine di un documento di identità valido per ogni ospite. Grazie in anticipo.",
       docTutti: "Serve il documento di tutte le persone che soggiornano ({n}).",
       docCarica: "Carica un documento", docOk: "Documento ricevuto, grazie.",
       docRicevuti: "{n} ricevuti",
+      ospiteN: "Ospite {n}", docCambia: "Cambia", docRicevuto: "Ricevuto",
+      docInvia: "Invia documenti", docInviaN: "Invia {n} documenti", docInvia1: "Invia 1 documento",
+      docInviando: "Invio in corso…", docAggiungi: "Aggiungi un altro ospite",
       salta: "Vai direttamente alla guida",
       barraManca: "Mancano i tuoi dati",
       barraApri: "Completa",
@@ -54,14 +59,18 @@
     en: {
       titolo: "Before you arrive",
       benvenuto: "Welcome",
-      sotto: "Two things and you're set. We need them by law and to get the flat ready for you.",
+      sotto: "Thank you again for choosing Nineteen Milano. We just need a few details to get your check-in ready.",
+      istruzioni: "See check-in instructions",
       codice: "Access code", codiceNota: "Active from your check-in day.",
       eta: "What time will you arrive?", etaSalva: "Save time", etaOk: "Time saved",
       doc: "Identity documents",
-      docNota: "Italian law requires us to report every guest's details to the police.",
+      docNota: "Italian law requires us to report the details of every guest staying at the property to the police. Please upload a photo of a valid ID for each guest. Thank you in advance.",
       docTutti: "We need the ID of everyone staying ({n}).",
       docCarica: "Upload a document", docOk: "Document received, thank you.",
       docRicevuti: "{n} received",
+      ospiteN: "Guest {n}", docCambia: "Change", docRicevuto: "Received",
+      docInvia: "Send documents", docInviaN: "Send {n} documents", docInvia1: "Send 1 document",
+      docInviando: "Sending…", docAggiungi: "Add another guest",
       salta: "Go straight to the guide",
       barraManca: "Your details are missing",
       barraApri: "Complete",
@@ -75,14 +84,18 @@
     es: {
       titolo: "Antes de llegar",
       benvenuto: "Bienvenido", benvenutoM: "Bienvenido", benvenutoF: "Bienvenida", benvenutoN: "Hola",
-      sotto: "Dos cosas y listo. Nos hacen falta por ley y para prepararte el apartamento.",
+      sotto: "Gracias de nuevo por elegir Nineteen Milano. Solo necesitamos algunos datos para preparar tu entrada.",
+      istruzioni: "Ver instrucciones de entrada",
       codice: "Código de acceso", codiceNota: "Activo desde el día de tu entrada.",
       eta: "¿A qué hora llegas?", etaSalva: "Guardar hora", etaOk: "Hora guardada",
       doc: "Documentos de identidad",
-      docNota: "La ley italiana nos obliga a comunicar los datos de cada huésped a la policía.",
+      docNota: "La ley italiana nos obliga a comunicar a la policía los datos de cada huésped que se aloje en el alojamiento. Te pedimos amablemente que subas la imagen de un documento de identidad válido de cada huésped. Gracias de antemano.",
       docTutti: "Necesitamos el documento de todas las personas que se alojan ({n}).",
       docCarica: "Subir un documento", docOk: "Documento recibido, gracias.",
       docRicevuti: "{n} recibidos",
+      ospiteN: "Huésped {n}", docCambia: "Cambiar", docRicevuto: "Recibido",
+      docInvia: "Enviar documentos", docInviaN: "Enviar {n} documentos", docInvia1: "Enviar 1 documento",
+      docInviando: "Enviando…", docAggiungi: "Añadir otro huésped",
       salta: "Ir directamente a la guía",
       barraManca: "Faltan tus datos",
       barraApri: "Completar",
@@ -96,14 +109,18 @@
     fr: {
       titolo: "Avant votre arrivée",
       benvenuto: "Bienvenue",
-      sotto: "Deux choses et c'est bon. Elles nous sont demandées par la loi et pour préparer l'appartement.",
+      sotto: "Merci encore d'avoir choisi Nineteen Milano. Nous avons juste besoin de quelques informations pour préparer votre arrivée.",
+      istruzioni: "Voir les instructions d'arrivée",
       codice: "Code d'accès", codiceNota: "Actif à partir du jour de votre arrivée.",
       eta: "À quelle heure arrivez-vous ?", etaSalva: "Enregistrer l'heure", etaOk: "Heure enregistrée",
       doc: "Pièces d'identité",
-      docNota: "La loi italienne nous oblige à communiquer les données de chaque voyageur à la police.",
+      docNota: "La loi italienne nous oblige à communiquer à la police les données de chaque voyageur séjournant dans le logement. Nous vous prions de bien vouloir télécharger l'image d'une pièce d'identité valide pour chaque voyageur. Merci d'avance.",
       docTutti: "Il nous faut la pièce d'identité de chaque personne séjournant ({n}).",
       docCarica: "Télécharger un document", docOk: "Document reçu, merci.",
       docRicevuti: "{n} reçus",
+      ospiteN: "Voyageur {n}", docCambia: "Modifier", docRicevuto: "Reçu",
+      docInvia: "Envoyer les documents", docInviaN: "Envoyer {n} documents", docInvia1: "Envoyer 1 document",
+      docInviando: "Envoi en cours…", docAggiungi: "Ajouter un voyageur",
       salta: "Aller directement au guide",
       barraManca: "Vos informations manquent",
       barraApri: "Compléter",
@@ -117,14 +134,18 @@
     de: {
       titolo: "Vor Ihrer Ankunft",
       benvenuto: "Willkommen",
-      sotto: "Zwei Dinge, dann sind Sie fertig. Wir brauchen sie gesetzlich und um die Wohnung vorzubereiten.",
+      sotto: "Vielen Dank, dass Sie sich für Nineteen Milano entschieden haben. Wir brauchen nur noch ein paar Angaben, um Ihren Check-in vorzubereiten.",
+      istruzioni: "Check-in-Anleitung ansehen",
       codice: "Zugangscode", codiceNota: "Ab Ihrem Anreisetag aktiv.",
       eta: "Wann kommen Sie an?", etaSalva: "Uhrzeit speichern", etaOk: "Uhrzeit gespeichert",
       doc: "Ausweisdokumente",
-      docNota: "Das italienische Recht verpflichtet uns, die Daten jedes Gastes der Polizei zu melden.",
+      docNota: "Das italienische Recht verpflichtet uns, die Daten jedes Gastes, der in der Unterkunft übernachtet, der Polizei zu melden. Bitte laden Sie das Bild eines gültigen Ausweisdokuments für jeden Gast hoch. Vielen Dank im Voraus.",
       docTutti: "Wir brauchen den Ausweis aller übernachtenden Personen ({n}).",
       docCarica: "Dokument hochladen", docOk: "Dokument erhalten, vielen Dank.",
       docRicevuti: "{n} erhalten",
+      ospiteN: "Gast {n}", docCambia: "Ändern", docRicevuto: "Erhalten",
+      docInvia: "Dokumente senden", docInviaN: "{n} Dokumente senden", docInvia1: "1 Dokument senden",
+      docInviando: "Wird gesendet…", docAggiungi: "Weiteren Gast hinzufügen",
       salta: "Direkt zum Guide",
       barraManca: "Ihre Angaben fehlen",
       barraApri: "Vervollständigen",
@@ -183,15 +204,6 @@
   }
 
   // ── pezzi di UI ────────────────────────────────────────────────────────
-  function bloccoCodice() {
-    if (!dati.codice) return null;
-    return el("div", { className: "gp-card" }, [
-      el("h3", { text: t("codice") }),
-      el("div", { className: "gp-code", text: dati.codice }),
-      el("p", { className: "gp-note", text: t("codiceNota") }),
-    ]);
-  }
-
   /** Niente bottone "salva": l'orario si registra da solo appena l'ospite lo
    *  sceglie. Un campo solo con un bottone accanto è un passaggio in più che
    *  qualcuno dimentica di premere, e allora l'orario non arriva mai. */
@@ -231,43 +243,140 @@
     ]);
   }
 
+  /** Un riquadro per ospite, con anteprima, e un invio ESPLICITO in fondo.
+   *
+   *  Prima l'upload partiva da solo al `change` dell'input: bastava un tocco
+   *  sbagliato nella galleria e sul Mini arrivava una foto a caso, senza modo
+   *  di annullarla e con la scheda già segnata come "documenti caricati". Ora
+   *  l'ospite sceglie, VEDE cosa ha scelto, e solo premendo «Invia documenti»
+   *  parte qualcosa.
+   *
+   *  Il numero di riquadri viene da `ospitiTotali` (adulti + minori). Se la
+   *  scheda non lo sa — succede sulle prenotazioni ricostruite dal reconcile —
+   *  si parte da uno e l'ospite ne aggiunge quanti gliene servono: meglio un
+   *  riquadro in meno che dirgli il numero sbagliato.
+   */
   function bloccoDocumenti() {
     var msg = el("p", { className: "gp-msg", hidden: "hidden" });
-    // Input nascosto: il bottone lo apre e l'upload parte da solo alla scelta
-    // del file. Prima servivano DUE click (uno per aprire, uno per inviare) e
-    // dopo aver scelto la foto sembrava che non succedesse nulla.
-    var file = el("input", { type: "file", accept: "image/*,application/pdf", hidden: "hidden" });
-    var btn = el("button", { className: "gp-btn gp-btn--ghost", type: "button", text: t("docCarica") });
+    var totaleNoto = dati.ospitiTotali || 0;
+    var nSlot = totaleNoto || 1;
+    var gia = Math.min(dati.documenti || 0, nSlot);   // già sul Mini
+    var scelti = {};                                  // indice riquadro → File
+    var urls = {};                                    // objectURL da revocare
 
-    function invia() {
-      if (!file.files[0]) return;
-      btn.disabled = true;
-      btn.textContent = "…";
-      var fd = new FormData(); fd.append("file", file.files[0]);
-      api("/upload", { method: "POST", body: fd }).then(function (r) {
+    var lista = el("div", { className: "gp-slots" });
+    var invia = el("button", { className: "gp-btn", type: "button" });
+
+    function aggiornaInvia() {
+      var n = Object.keys(scelti).length;
+      invia.disabled = n === 0;
+      // «Invia 1 documenti» si legge male: il singolare è una chiave a sé,
+      // non un plurale costruito a mano, perché in tedesco il numero va prima.
+      invia.textContent = !n ? t("docInvia")
+        : n === 1 ? t("docInvia1")
+        : fill(t("docInviaN"), { n: n });
+    }
+
+    function riquadro(i) {
+      var box = el("div", { className: "gp-slot" }, [
+        el("span", { className: "gp-slot-lbl", text: fill(t("ospiteN"), { n: i + 1 }) }),
+      ]);
+      // I documenti già ricevuti non sono associati a un ospite preciso (il
+      // server tiene solo il conteggio): si marcano i primi riquadri, che è
+      // quanto basta per far vedere che manca ancora qualcosa.
+      if (i < gia) {
+        box.className = "gp-slot gp-slot--ok";
+        box.appendChild(el("span", { className: "gp-slot-ok", text: "✓ " + t("docRicevuto") }));
+        return box;
+      }
+
+      var file = el("input", { type: "file", accept: "image/*,application/pdf", hidden: "hidden" });
+      var prev = el("div", { className: "gp-slot-prev" });
+      var btn = el("button", { className: "gp-btn gp-btn--ghost gp-slot-btn", type: "button",
+                               text: t("docCarica") });
+
+      file.addEventListener("change", function () {
+        var f = file.files[0];
+        if (!f) return;
+        if (urls[i]) URL.revokeObjectURL(urls[i]);
+        scelti[i] = f;
+        prev.innerHTML = "";
+        if (/^image\//.test(f.type)) {
+          urls[i] = URL.createObjectURL(f);
+          prev.appendChild(el("img", { className: "gp-thumb", src: urls[i], alt: "" }));
+        } else {
+          prev.appendChild(el("div", { className: "gp-thumb gp-thumb--file", text: "PDF" }));
+        }
+        prev.appendChild(el("span", { className: "gp-slot-nome", text: f.name }));
+        box.className = "gp-slot gp-slot--pieno";
+        btn.textContent = t("docCambia");
+        aggiornaInvia();
+      });
+      btn.addEventListener("click", function () { file.click(); });
+
+      box.appendChild(prev);
+      box.appendChild(file);
+      box.appendChild(btn);
+      return box;
+    }
+
+    function disegnaSlot() {
+      lista.innerHTML = "";
+      for (var i = 0; i < nSlot; i++) lista.appendChild(riquadro(i));
+      if (!totaleNoto) {
+        var piu = el("button", { className: "gp-piu", type: "button", text: t("docAggiungi") });
+        piu.addEventListener("click", function () { nSlot++; disegnaSlot(); });
+        lista.appendChild(piu);
+      }
+    }
+
+    invia.addEventListener("click", function () {
+      var indici = Object.keys(scelti);
+      if (!indici.length) return;
+      invia.disabled = true;
+      invia.textContent = t("docInviando");
+      var ok = 0, errore = "";
+      // Uno alla volta, non in parallelo: il server ha un rate limit per IP e
+      // una raffica di POST si prenderebbe un 429 a metà invio, lasciando
+      // l'ospite senza sapere quali documenti sono passati.
+      var catena = Promise.resolve();
+      indici.forEach(function (i) {
+        catena = catena.then(function () {
+          var fd = new FormData();
+          fd.append("file", scelti[i]);
+          return api("/upload", { method: "POST", body: fd }).then(function (r) {
+            if (r && r.ok) ok++;
+            else errore = (r && r.message) || errore;
+          });
+        });
+      });
+      catena.then(function () {
+        Object.keys(urls).forEach(function (k) { URL.revokeObjectURL(urls[k]); });
         msg.hidden = false;
-        msg.className = "gp-msg " + (r.ok ? "gp-msg--ok" : "gp-msg--err");
-        msg.textContent = r.ok ? t("docOk") : (r.message || t("giu"));
-        file.value = ""; btn.disabled = false; btn.textContent = t("docCarica");
-        if (r.ok) carica().then(disegna);
+        if (ok && !errore) {
+          msg.className = "gp-msg gp-msg--ok";
+          msg.textContent = t("docOk");
+        } else {
+          msg.className = "gp-msg gp-msg--err";
+          msg.textContent = errore || fill(t("giu"), { tel: (dati && dati.telefono) || "" });
+        }
+        carica().then(disegna);
       }).catch(function () {
         msg.hidden = false;
         msg.className = "gp-msg gp-msg--err";
         msg.textContent = fill(t("giu"), { tel: (dati && dati.telefono) || "" });
-        file.value = ""; btn.disabled = false; btn.textContent = t("docCarica");
+        aggiornaInvia();
       });
-    }
+    });
 
-    file.addEventListener("change", invia);
-    btn.addEventListener("click", function () { file.click(); });
+    disegnaSlot();
+    aggiornaInvia();
+
     var kids = [el("h3", { text: t("doc") }), el("p", { className: "gp-note", text: t("docNota") })];
-    if (dati.ospitiTotali) {
-      kids.push(el("p", { className: "gp-note", text: fill(t("docTutti"), { n: dati.ospitiTotali }) }));
+    if (totaleNoto) {
+      kids.push(el("p", { className: "gp-note", text: fill(t("docTutti"), { n: totaleNoto }) }));
     }
-    if (dati.documenti > 0) {
-      kids.push(el("p", { className: "gp-ok", text: "✓ " + fill(t("docRicevuti"), { n: dati.documenti }) }));
-    }
-    kids.push(msg, file, btn);
+    kids.push(lista, msg, invia);
     return el("div", { className: "gp-card" }, kids);
   }
 
@@ -293,15 +402,32 @@
   }
 
   // ── stati ──────────────────────────────────────────────────────────────
+  /** Manda alla sezione check-in della guida, dove `codiceNellaGuida()` ha già
+   *  innestato il codice d'accesso. È lì che il codice serve — davanti alla
+   *  porta — non in cima a un modulo da compilare. Sostituisce anche il vecchio
+   *  link «vai direttamente alla guida»: due uscite verso lo stesso posto, una
+   *  sotto l'altra, erano solo rumore. */
+  function bottoneIstruzioni() {
+    var b = el("button", { className: "gp-btn gp-istruzioni", type: "button",
+                           text: t("istruzioni") });
+    b.addEventListener("click", function () {
+      guidaAperta = true;
+      disegna();                       // chiude l'overlay, innesta codice e orario
+      var sez = document.getElementById("checkin");
+      if (sez) sez.scrollIntoView({ behavior: "smooth", block: "start" });
+    });
+    return b;
+  }
+
   function overlay() {
+    // Prima quello che chiediamo noi (orario → documenti → imposta), poi la via
+    // d'uscita verso la guida. Il codice d'accesso non sta più qui.
     var kids = [
       el("h2", { text: saluto() }),
       el("p", { className: "gp-lead", text: t("sotto") }),
-      bloccoCodice(), bloccoEta(), bloccoDocumenti(), bloccoImposta(),
+      bloccoEta(), bloccoDocumenti(), bloccoImposta(),
+      bottoneIstruzioni(),
     ];
-    var salta = el("button", { className: "gp-skip", type: "button", text: t("salta") });
-    salta.addEventListener("click", function () { guidaAperta = true; disegna(); });
-    kids.push(salta);
     return el("div", { className: "gp-overlay", id: "gp-overlay" },
       [el("div", { className: "gp-overlay-inner" }, kids)]);
   }
