@@ -1331,6 +1331,19 @@ body.gp-locked { overflow: hidden; }
 
 .gp-barra--on { background: var(--accent); }
 
+/* Tratteggiata = si riempirà all'invio. Distinguerla da quella piena è il modo
+   di dire "questo l'ho contato ma non l'ho ancora ricevuto" senza scriverlo. */
+.gp-barra--attesa {
+  background: repeating-linear-gradient(90deg,
+    var(--accent) 0 4px, transparent 4px 8px);
+  opacity: 0.65;
+}
+
+/* Quanti ne mancano, detto in chiaro: è l'informazione per cui l'ospite guarda
+   questa card. */
+.gp-manca { margin: 0.35rem 0 0; font-size: 0.85rem; font-weight: 600; color: var(--accent); }
+.gp-manca--ok { color: #15803d; }
+
 .gp-progresso-lbl {
   font-size: 0.78rem;
   font-weight: 600;
@@ -1339,54 +1352,34 @@ body.gp-locked { overflow: hidden; }
   flex: 0 0 auto;
 }
 
-/* Un riquadro per ospite. Il bordo tratteggiato dice "qui manca qualcosa"
-   senza bisogno di scriverlo; diventa pieno quando il file è stato scelto. */
 .gp-slots { display: grid; gap: 0.6rem; margin: 0.9rem 0; }
 
-.gp-slot {
+/* Una foto scelta ma NON ancora inviata. */
+.gp-foto {
   display: flex;
   align-items: center;
   gap: 0.7rem;
-  flex-wrap: wrap;
-  padding: 0.7rem 0.8rem;
-  border: 1px dashed var(--border);
-  border-radius: 12px;
-  background: var(--bg);
-}
-
-.gp-slot--pieno { border-style: solid; border-color: var(--accent); background: var(--surface); }
-
-.gp-slot-lbl {
-  font-size: 0.8rem;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-  color: var(--muted);
-  flex: 0 0 auto;
-}
-
-/* L'anteprima è il punto della modifica: l'ospite deve VEDERE cosa sta per
-   mandare prima che parta, non scoprirlo dopo. */
-.gp-slot-prev { display: flex; align-items: center; gap: 0.55rem; margin-left: auto; min-width: 0; }
-
-.gp-thumb {
-  width: 46px;
-  height: 46px;
-  object-fit: cover;
-  border-radius: 8px;
+  padding: 0.6rem 0.7rem;
   border: 1px solid var(--border);
+  border-radius: 12px;
   background: var(--surface);
-  flex: 0 0 auto;
 }
 
-.gp-thumb--file {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 0.7rem;
-  font-weight: 700;
-  letter-spacing: 0.04em;
+.gp-foto-info { display: flex; flex-direction: column; min-width: 0; flex: 1; }
+
+.gp-foto-n { font-size: 0.8rem; font-weight: 600; color: var(--accent); }
+.gp-foto-n--wait { color: var(--muted); font-weight: 400; }
+
+.gp-togli {
+  flex: 0 0 auto;
+  padding: 0.4rem 0.6rem;
+  font: inherit;
+  font-size: 0.78rem;
   color: var(--muted);
+  background: none;
+  border: 0;
+  text-decoration: underline;
+  cursor: pointer;
 }
 
 .gp-slot-nome {
@@ -1395,21 +1388,6 @@ body.gp-locked { overflow: hidden; }
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  max-width: 9rem;
-}
-
-.gp-slot-btn { width: auto; flex: 0 0 auto; padding: 0.5rem 0.9rem; font-size: 0.85rem; }
-.gp-slot--pieno .gp-slot-btn { margin-left: 0; }
-
-.gp-piu {
-  padding: 0.6rem;
-  font: inherit;
-  font-size: 0.85rem;
-  color: var(--muted);
-  background: none;
-  border: 1px dashed var(--border);
-  border-radius: 12px;
-  cursor: pointer;
 }
 
 /* Il bottone grande in fondo alla schermata personale: unica via verso la
