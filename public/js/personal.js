@@ -197,20 +197,33 @@
 
   function bloccoDocumenti() {
     var msg = el("p", { className: "gp-msg", hidden: "hidden" });
-    var file = el("input", { type: "file", accept: "image/*,application/pdf" });
+    // Input nascosto: il bottone lo apre e l'upload parte da solo alla scelta
+    // del file. Prima servivano DUE click (uno per aprire, uno per inviare) e
+    // dopo aver scelto la foto sembrava che non succedesse nulla.
+    var file = el("input", { type: "file", accept: "image/*,application/pdf", hidden: "hidden" });
     var btn = el("button", { className: "gp-btn gp-btn--ghost", type: "button", text: t("docCarica") });
-    btn.addEventListener("click", function () {
-      if (!file.files[0]) { file.click(); return; }
+
+    function invia() {
+      if (!file.files[0]) return;
       btn.disabled = true;
+      btn.textContent = "…";
       var fd = new FormData(); fd.append("file", file.files[0]);
       api("/upload", { method: "POST", body: fd }).then(function (r) {
         msg.hidden = false;
         msg.className = "gp-msg " + (r.ok ? "gp-msg--ok" : "gp-msg--err");
-        msg.textContent = r.ok ? t("docOk") : (r.message || "");
-        file.value = ""; btn.disabled = false;
+        msg.textContent = r.ok ? t("docOk") : (r.message || t("giu"));
+        file.value = ""; btn.disabled = false; btn.textContent = t("docCarica");
         if (r.ok) carica().then(disegna);
-      }).catch(function () { btn.disabled = false; });
-    });
+      }).catch(function () {
+        msg.hidden = false;
+        msg.className = "gp-msg gp-msg--err";
+        msg.textContent = fill(t("giu"), { tel: (dati && dati.telefono) || "" });
+        file.value = ""; btn.disabled = false; btn.textContent = t("docCarica");
+      });
+    }
+
+    file.addEventListener("change", invia);
+    btn.addEventListener("click", function () { file.click(); });
     var kids = [el("h3", { text: t("doc") }), el("p", { className: "gp-note", text: t("docNota") })];
     if (dati.ospitiTotali) {
       kids.push(el("p", { className: "gp-note", text: fill(t("docTutti"), { n: dati.ospitiTotali }) }));
@@ -225,11 +238,14 @@
   function bloccoImposta() {
     if (!dati.imposta || !dati.imposta.daPagare) return null;
     var i = dati.imposta;
+    // Etichetta sopra, valore sotto: su telefono l'IBAN è troppo lungo per stare
+    // di fianco, e l'intestatario finiva a capo spezzato in mezzo alla stringa.
     var lista = el("ul", { className: "gp-pay" });
     if (i.paypal) lista.appendChild(el("li", {
       html: "<b>PayPal</b><a href=\"" + i.paypal + "\" target=\"_blank\" rel=\"noopener\">" + i.paypal + "</a>" }));
     if (i.iban) lista.appendChild(el("li", {
-      html: "<b>IBAN</b><code>" + i.iban + (i.intestatario ? " · " + i.intestatario : "") + "</code>" }));
+      html: "<b>IBAN</b><code>" + i.iban + "</code>"
+            + (i.intestatario ? "<em>" + i.intestatario + "</em>" : "") }));
     return el("div", { className: "gp-card gp-card--pay" }, [
       el("h3", { text: t("imposta") }),
       el("div", { className: "gp-amount", text: "€ " + i.importo.toFixed(2).replace(".", ",") }),
