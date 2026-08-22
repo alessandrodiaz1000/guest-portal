@@ -1314,15 +1314,11 @@ body.gp-locked { overflow: hidden; }
 .gp-pay em { display: block; margin-top: 0.15rem; font-style: normal; font-size: 0.82rem; color: var(--muted); }
 .gp-pay a { display: block; word-break: break-all; }
 
-/* Il link per saltare alla guida è deliberatamente piccolo e in fondo: si può
-   fare, ma non è la strada principale. */
-/* Il link per saltare alla guida resta appiccicato in fondo allo schermo
-   mentre si scorre: prima stava in coda al contenuto e su un telefono, con
-   codice + orario + documenti + imposta, non lo si raggiungeva mai. Piccolo e
-   defilato ma sempre lì. */
+/* Il link per saltare alla guida è deliberatamente piccolo e in coda al
+   contenuto: si può fare, ma non è la strada principale. Niente sticky: una
+   barra sempre a schermo era un elemento fisso in più su una pagina che ne ha
+   già. `background:none` perché è un <button>, che di suo avrebbe il grigio. */
 .gp-skip {
-  position: sticky;
-  bottom: 0;
   display: block;
   width: 100%;
   margin-top: 1.4rem;
@@ -1330,7 +1326,7 @@ body.gp-locked { overflow: hidden; }
   font: inherit;
   font-size: 0.85rem;
   color: var(--muted);
-  background: linear-gradient(to bottom, rgba(245,240,232,0), var(--bg) 35%);
+  background: none;
   border: 0;
   text-decoration: underline;
   cursor: pointer;
