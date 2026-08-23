@@ -521,12 +521,15 @@
   }
 
   function overlay() {
-    // Prima quello che chiediamo noi (orario → documenti → imposta), poi la via
-    // d'uscita verso la guida. Il codice d'accesso non sta più qui.
+    // Imposta in cima: è il primo pensiero dell'ospite quando ha capito che
+    // c'è qualcosa da pagare, e lasciarla in fondo alla lista di richieste
+    // dava l'impressione di doverla scoprire. Poi quello che chiediamo noi
+    // (orario, documenti), poi la via d'uscita verso la guida. Il codice
+    // d'accesso non sta più qui.
     var kids = [
       el("h2", { text: saluto() }),
       el("p", { className: "gp-lead", text: t("sotto") }),
-      bloccoEta(), bloccoDocumenti(), bloccoImposta(),
+      bloccoImposta(), bloccoEta(), bloccoDocumenti(),
       bottoneIstruzioni(),
     ];
     return el("div", { className: "gp-overlay", id: "gp-overlay" },
