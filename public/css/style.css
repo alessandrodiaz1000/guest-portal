@@ -1302,6 +1302,11 @@ body.gp-locked { overflow: hidden; }
 
 .gp-chip--on { background: var(--text); color: var(--surface); border-color: var(--text); }
 
+/* Il pannello del metodo scelto: appare/cambia sotto i chip, mai più di uno
+   alla volta. Nessuna animazione: cambiare metodo è raro, non vale la spesa. */
+.gp-metodo-dett:empty { margin: 0; }
+.gp-metodo-dett { margin-top: 0.5rem; }
+
 .gp-pay { list-style: none; padding: 0; margin: 0.75rem 0 0; }
 /* Una riga per voce, etichetta sopra e valore sotto: su telefono l'IBAN non
    sta di fianco all'etichetta e l'intestatario finiva a capo spezzato. */

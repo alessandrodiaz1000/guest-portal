@@ -55,10 +55,12 @@
       barraManca: "Mancano i tuoi dati",
       barraApri: "Completa",
       imposta: "Imposta di soggiorno", impostaNota: "Da versare a noi, non è inclusa in quanto hai già pagato.",
-      impostaCome: "All'arrivo in contanti, oppure ora con:",
       impostaEsenti: "I minori di 18 anni sono esenti.",
       impostaComeVuoi: "Come preferisci pagare?",
       metodoContanti: "Contanti", metodoPaypal: "PayPal", metodoIban: "Bonifico", metodoSatispay: "Satispay",
+      metodoAltro: "Altro",
+      impostaContantiOk: "Va bene, ci vediamo con il contante all'arrivo.",
+      impostaAltroTesto: "Scrivici su Airbnb, Booking o WhatsApp al {tel} per altre modalità di pagamento.",
       giu: "Non riusciamo a caricare i tuoi dati. Scrivici su Airbnb o Booking, oppure su WhatsApp al {tel}.",
       scaduto: "Questo link non è più attivo.",
       etaInGuida: "Hai indicato il tuo arrivo per le <strong>{eta}</strong>.",
@@ -86,10 +88,12 @@
       barraManca: "Your details are missing",
       barraApri: "Complete",
       imposta: "City tax", impostaNota: "Payable to us, not included in what you already paid.",
-      impostaCome: "In cash on arrival, or now with:",
       impostaEsenti: "Guests under 18 are exempt.",
       impostaComeVuoi: "How would you like to pay?",
       metodoContanti: "Cash", metodoPaypal: "PayPal", metodoIban: "Bank transfer", metodoSatispay: "Satispay",
+      metodoAltro: "Other",
+      impostaContantiOk: "Great, we'll settle up in cash when you arrive.",
+      impostaAltroTesto: "Message us on Airbnb, Booking or WhatsApp at {tel} for other payment options.",
       giu: "We can't load your details right now. Message us on Airbnb or Booking, or on WhatsApp at {tel}.",
       scaduto: "This link is no longer active.",
       etaInGuida: "You told us you'll arrive at <strong>{eta}</strong>.",
@@ -117,10 +121,12 @@
       barraManca: "Faltan tus datos",
       barraApri: "Completar",
       imposta: "Tasa turística", impostaNota: "Se paga a nosotros, no está incluida en lo que ya pagaste.",
-      impostaCome: "En efectivo al llegar, o ahora con:",
       impostaEsenti: "Los menores de 18 años están exentos.",
       impostaComeVuoi: "¿Cómo prefieres pagar?",
       metodoContanti: "Efectivo", metodoPaypal: "PayPal", metodoIban: "Transferencia", metodoSatispay: "Satispay",
+      metodoAltro: "Otro",
+      impostaContantiOk: "Perfecto, lo arreglamos en efectivo a tu llegada.",
+      impostaAltroTesto: "Escríbenos por Airbnb, Booking o WhatsApp al {tel} para otras formas de pago.",
       giu: "No podemos cargar tus datos. Escríbenos por Airbnb o Booking, o por WhatsApp al {tel}.",
       scaduto: "Este enlace ya no está activo.",
       etaInGuida: "Nos has indicado que llegas a las <strong>{eta}</strong>.",
@@ -148,10 +154,12 @@
       barraManca: "Vos informations manquent",
       barraApri: "Compléter",
       imposta: "Taxe de séjour", impostaNota: "À régler auprès de nous, non comprise dans ce que vous avez payé.",
-      impostaCome: "En espèces à l'arrivée, ou maintenant via :",
       impostaEsenti: "Les moins de 18 ans sont exemptés.",
       impostaComeVuoi: "Comment préférez-vous payer ?",
       metodoContanti: "Espèces", metodoPaypal: "PayPal", metodoIban: "Virement", metodoSatispay: "Satispay",
+      metodoAltro: "Autre",
+      impostaContantiOk: "Très bien, on règle en espèces à votre arrivée.",
+      impostaAltroTesto: "Écrivez-nous sur Airbnb, Booking ou WhatsApp au {tel} pour d'autres moyens de paiement.",
       giu: "Impossible de charger vos informations. Écrivez-nous sur Airbnb ou Booking, ou sur WhatsApp au {tel}.",
       scaduto: "Ce lien n'est plus actif.",
       etaInGuida: "Vous nous avez indiqué une arrivée à <strong>{eta}</strong>.",
@@ -179,10 +187,12 @@
       barraManca: "Ihre Angaben fehlen",
       barraApri: "Vervollständigen",
       imposta: "Kurtaxe", impostaNota: "An uns zu zahlen, nicht in Ihrer Zahlung enthalten.",
-      impostaCome: "Bar bei Ankunft, oder jetzt über:",
       impostaEsenti: "Unter 18-Jährige sind befreit.",
       impostaComeVuoi: "Wie möchten Sie bezahlen?",
       metodoContanti: "Bar", metodoPaypal: "PayPal", metodoIban: "Überweisung", metodoSatispay: "Satispay",
+      metodoAltro: "Andere",
+      impostaContantiOk: "In Ordnung, wir regeln es bar bei Ihrer Ankunft.",
+      impostaAltroTesto: "Schreiben Sie uns über Airbnb, Booking oder WhatsApp an {tel} für andere Zahlungsarten.",
       giu: "Wir können Ihre Daten nicht laden. Schreiben Sie uns über Airbnb oder Booking, oder per WhatsApp an {tel}.",
       scaduto: "Dieser Link ist nicht mehr aktiv.",
       etaInGuida: "Sie haben uns <strong>{eta}</strong> als Ankunftszeit genannt.",
@@ -494,28 +504,62 @@
    *  Ale ha configurato (Contanti è sempre disponibile), e la scelta arriva
    *  sulla pagina Ospiti PRIMA dell'arrivo — invece di scoprirla al check-in
    *  o aprendo un messaggio da tradurre. Un tocco, non un campo da scrivere. */
+  /** Il dettaglio del metodo scelto — SOLO quello scelto, non tutti i canali
+   *  insieme. Prima la card mostrava PayPal e IBAN sempre aperti a prescindere
+   *  da cosa avesse toccato l'ospite; ora tocca "Bonifico" e vede l'IBAN,
+   *  tocca "Altro" e vede dove scriverci. Un accordion a una voce, non una
+   *  lista. Satispay non compariva mai, nemmeno prima: il chip c'era ma il suo
+   *  dettaglio non era stato collegato. */
+  function _dettaglioMetodo(i, metodo) {
+    if (metodo === "contanti") {
+      return el("p", { className: "gp-note", text: t("impostaContantiOk") });
+    }
+    if (metodo === "altro") {
+      return el("p", { className: "gp-note",
+                       text: fill(t("impostaAltroTesto"), { tel: (dati && dati.telefono) || "" }) });
+    }
+    var lista = el("ul", { className: "gp-pay" });
+    if (metodo === "paypal" && i.paypal) lista.appendChild(el("li", {
+      html: "<b>PayPal</b><a href=\"" + i.paypal + "\" target=\"_blank\" rel=\"noopener\">" + i.paypal + "</a>" }));
+    if (metodo === "iban" && i.iban) lista.appendChild(el("li", {
+      html: "<b>IBAN</b><code>" + i.iban + "</code>"
+            + (i.intestatario ? "<em>" + i.intestatario + "</em>" : "") }));
+    // Satispay è un handle (@nome), non un URL: se un giorno diventasse un link
+    // (es. satispay.com/pay/...) il ramo con <a> lo gestisce da solo, come già
+    // fa la pagina di fallback sul Mini per lo stesso dato.
+    if (metodo === "satispay" && i.satispay) lista.appendChild(el("li", {
+      html: "<b>Satispay</b>" + (/^https?:\/\//.test(i.satispay)
+        ? "<a href=\"" + i.satispay + "\" target=\"_blank\" rel=\"noopener\">" + i.satispay + "</a>"
+        : "<code>" + i.satispay + "</code>") }));
+    return lista;
+  }
+
   function bloccoImposta() {
     if (!dati.imposta || !dati.imposta.daPagare) return null;
     var i = dati.imposta;
     var msg = el("p", { className: "gp-msg", hidden: "hidden" });
 
-    var METODI = [
-      { code: "contanti", label: t("metodoContanti") },
-    ];
+    var METODI = [{ code: "contanti", label: t("metodoContanti") }];
     if (i.paypal) METODI.push({ code: "paypal", label: t("metodoPaypal") });
     if (i.iban) METODI.push({ code: "iban", label: t("metodoIban") });
     if (i.satispay) METODI.push({ code: "satispay", label: t("metodoSatispay") });
+    // "Altro" sempre presente, a prescindere da cosa è configurato: dice solo
+    // "ci scrivo io per accordarci", non un canale che Ale deve aver impostato.
+    METODI.push({ code: "altro", label: t("metodoAltro") });
+
+    var chips = el("div", { className: "gp-metodi" });
+    var dettaglio = el("div", { className: "gp-metodo-dett" });
 
     var busy = false;
     function scegli(m) {
-      if (busy) return;
+      if (busy || i.metodo === m) return;
       busy = true;
       api("/metodo", {
         method: "POST", headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ metodo: m }),
       }).then(function (r) {
         busy = false;
-        if (r && r.ok) { i.metodo = m; ridisegnaChip(); }
+        if (r && r.ok) { i.metodo = m; ridisegna(); }
         else {
           msg.hidden = false; msg.className = "gp-msg gp-msg--err";
           msg.textContent = fill(t("giu"), { tel: (dati && dati.telefono) || "" });
@@ -527,8 +571,7 @@
       });
     }
 
-    var chips = el("div", { className: "gp-metodi" });
-    function ridisegnaChip() {
+    function ridisegna() {
       chips.innerHTML = "";
       METODI.forEach(function (m) {
         var b = el("button", {
@@ -538,25 +581,17 @@
         b.addEventListener("click", function () { scegli(m.code); });
         chips.appendChild(b);
       });
+      dettaglio.innerHTML = "";
+      if (i.metodo) dettaglio.appendChild(_dettaglioMetodo(i, i.metodo));
     }
-    ridisegnaChip();
+    ridisegna();
 
-    // Etichetta sopra, valore sotto: su telefono l'IBAN è troppo lungo per stare
-    // di fianco, e l'intestatario finiva a capo spezzato in mezzo alla stringa.
-    var lista = el("ul", { className: "gp-pay" });
-    if (i.paypal) lista.appendChild(el("li", {
-      html: "<b>PayPal</b><a href=\"" + i.paypal + "\" target=\"_blank\" rel=\"noopener\">" + i.paypal + "</a>" }));
-    if (i.iban) lista.appendChild(el("li", {
-      html: "<b>IBAN</b><code>" + i.iban + "</code>"
-            + (i.intestatario ? "<em>" + i.intestatario + "</em>" : "") }));
     return el("div", { className: "gp-card gp-card--pay" }, [
       el("h3", { text: t("imposta") }),
       el("div", { className: "gp-amount", text: "€ " + i.importo.toFixed(2).replace(".", ",") }),
       el("p", { className: "gp-note", text: t("impostaNota") }),
       el("p", { className: "gp-note", text: t("impostaComeVuoi") }),
-      chips, msg,
-      el("p", { className: "gp-note", text: t("impostaCome") }),
-      lista,
+      chips, dettaglio, msg,
       el("p", { className: "gp-note", text: t("impostaEsenti") }),
     ]);
   }
