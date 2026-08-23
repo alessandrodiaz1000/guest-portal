@@ -2,6 +2,7 @@
   const STORAGE_KEY = "nineteen-lang";
   const defaultLang = "it";
   let scrollHandlersBound = false;
+  let lastRoute = null;
 
   function getLang() {
     const saved = localStorage.getItem(STORAGE_KEY);
@@ -55,19 +56,6 @@
       this.src = "images/placeholder.svg";
     };
     return img;
-  }
-
-  function navEntries(c) {
-    return Object.entries(c.nav);
-  }
-
-  function renderChapterHeader(title, lead) {
-    const header = el("div", { className: "chapter-header reveal" });
-    const inner = el("div", { className: "container" });
-    inner.appendChild(el("h2", { className: "chapter-title", text: title }));
-    if (lead) inner.appendChild(el("p", { className: "chapter-lead", text: lead }));
-    header.appendChild(inner);
-    return header;
   }
 
   function renderCheckinSection(c) {
@@ -277,37 +265,6 @@
     return section;
   }
 
-  function renderArrivalChapter(c, lang) {
-    const chapter = el("div", { className: "chapter", id: "arrival" });
-    const ch = c.chapters.arrival;
-    chapter.appendChild(renderChapterHeader(ch.title, ch.lead));
-    chapter.appendChild(renderCheckinSection(c));
-    chapter.appendChild(renderDirectionsSection(lang));
-    chapter.appendChild(renderParkingSection(c));
-    return chapter;
-  }
-
-  function renderOnceInChapter(c, lang) {
-    const chapter = el("div", { className: "chapter", id: "once-in" });
-    const ch = c.chapters["once-in"];
-    chapter.appendChild(renderChapterHeader(ch.title, ch.lead));
-    chapter.appendChild(renderWifiSection(c));
-    chapter.appendChild(renderGuideSection(lang));
-    if (window.GUEST_FEATURES?.showHouseGallery) {
-      chapter.appendChild(renderHouseGallery(c, lang));
-    }
-    return chapter;
-  }
-
-  function renderUsefulChapter(c, lang) {
-    const chapter = el("div", { className: "chapter", id: "useful" });
-    const ch = c.chapters.useful;
-    chapter.appendChild(renderChapterHeader(ch.title, ch.lead));
-    chapter.appendChild(renderRestaurantsSection(lang));
-    chapter.appendChild(renderMilanSection(c, lang));
-    return chapter;
-  }
-
   function renderScrollGallery(items, lang, variant) {
     const wrap = el("div", { className: `scroll-gallery scroll-gallery--${variant}` });
     const track = el("div", { className: "scroll-gallery__track", tabindex: "0", role: "region" });
@@ -427,6 +384,121 @@
     return details;
   }
 
+  // Dati già scritti in guide-sections.js ma mai agganciati a una vista:
+  // biglietti ATM (utili su "Come raggiungerci") e contatti utili (taxi,
+  // farmacia, emergenze — utili su "Contatti").
+  function renderTransportSection(lang) {
+    const t = window.GUEST_GUIDE[lang].transport;
+    const section = el("section", { className: "section-block reveal" });
+    const inner = el("div", { className: "container" });
+    inner.appendChild(el("h2", { className: "section-title", text: t.title }));
+    const body = el("div", { className: "section-toggle__body" });
+    t.tickets.forEach((x) => {
+      const item = el("div", { className: "parking-item" });
+      item.appendChild(el("h3", { text: x.name }));
+      item.appendChild(el("p", { text: x.desc }));
+      body.appendChild(item);
+    });
+    inner.appendChild(wrapInToggle(t.toggle, body));
+    section.appendChild(inner);
+    return section;
+  }
+
+  function renderUsefulContactsSection(lang) {
+    const u = window.GUEST_GUIDE[lang].useful;
+    const section = el("section", { className: "section-block reveal" });
+    const inner = el("div", { className: "container" });
+    inner.appendChild(el("h2", { className: "section-title", text: u.title }));
+    const body = el("div", { className: "section-toggle__body" });
+    u.items.forEach((item) => {
+      const row = el("div", { className: "parking-item" });
+      row.appendChild(el("h3", { text: item.label }));
+      row.appendChild(item.href
+        ? el("a", { className: "tel", href: item.href, text: item.value })
+        : el("p", { text: item.value }));
+      body.appendChild(row);
+    });
+    inner.appendChild(wrapInToggle(u.toggle, body));
+    section.appendChild(inner);
+    return section;
+  }
+
+  // Icone minimali inline (niente libreria esterna per un sito statico).
+  function topicIconMarkup(id) {
+    const attrs = 'viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" ' +
+      'stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"';
+    const shapes = {
+      directions: '<circle cx="12" cy="10" r="3"></circle>' +
+        '<path d="M12 2a8 8 0 0 0-8 8c0 5.25 8 12 8 12s8-6.75 8-12a8 8 0 0 0-8-8z"></path>',
+      parking: '<circle cx="12" cy="12" r="9"></circle>' +
+        '<text x="12" y="16.5" text-anchor="middle" font-size="11" font-weight="700" ' +
+        'fill="currentColor" stroke="none" font-family="inherit">P</text>',
+      wifi: '<path d="M5 12.55a11 11 0 0 1 14.08 0"></path>' +
+        '<path d="M1.42 9a16 16 0 0 1 21.16 0"></path>' +
+        '<path d="M8.53 16.11a6 6 0 0 1 6.95 0"></path>' +
+        '<line x1="12" y1="20" x2="12.01" y2="20"></line>',
+      house: '<path d="M3 9l9-7 9 7"></path>' +
+        '<path d="M5 10v9a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-9"></path>' +
+        '<path d="M9 21v-7h6v7"></path>',
+      milan: '<polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"></polygon>' +
+        '<line x1="8" y1="2" x2="8" y2="18"></line><line x1="16" y1="6" x2="16" y2="22"></line>',
+      contact: '<path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 ' +
+        '19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"></path>',
+    };
+    return `<svg ${attrs}>${shapes[id] || ""}</svg>`;
+  }
+
+  function renderCardGrid(c) {
+    const section = el("section", { className: "card-grid-section reveal", id: "topics" });
+    const inner = el("div", { className: "container" });
+    const grid = el("div", { className: "card-grid" });
+    Object.entries(c.topics).forEach(([id, topic]) => {
+      const card = el("a", { className: "card-tile reveal", href: `#screen/${id}` });
+      card.appendChild(el("span", { className: "card-tile__icon", html: topicIconMarkup(id) }));
+      const body = el("div", { className: "card-tile__body" });
+      body.appendChild(el("h3", { className: "card-tile__title", text: topic.title }));
+      body.appendChild(el("p", { className: "card-tile__subtitle", text: topic.subtitle }));
+      card.appendChild(body);
+      grid.appendChild(card);
+    });
+    inner.appendChild(grid);
+    section.appendChild(inner);
+    return section;
+  }
+
+  function renderScreenBack(c) {
+    const bar = el("div", { className: "screen-back" });
+    const inner = el("div", { className: "container" });
+    const link = el("a", { className: "screen-back__link", href: "#" });
+    link.innerHTML = '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" ' +
+      'stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' +
+      '<line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>' +
+      `<span>${c.backHome}</span>`;
+    inner.appendChild(link);
+    bar.appendChild(inner);
+    return bar;
+  }
+
+  // Ogni schermata è una o più sezioni già esistenti, solo riassemblate: il
+  // contenuto di ciascuna non cambia, cambia solo come viene raggiunto.
+  const SCREENS = {
+    directions: (c, lang) => [renderDirectionsSection(lang), renderTransportSection(lang)],
+    parking: (c, lang) => [renderParkingSection(c)],
+    wifi: (c, lang) => [renderWifiSection(c)],
+    house: (c, lang) => {
+      const nodes = [renderGuideSection(lang)];
+      if (window.GUEST_FEATURES?.showHouseGallery) nodes.push(renderHouseGallery(c, lang));
+      return nodes;
+    },
+    milan: (c, lang) => [renderRestaurantsSection(lang), renderMilanSection(c, lang)],
+    contact: (c, lang) => [renderContactSection(c), renderUsefulContactsSection(lang)],
+  };
+
+  function getRoute() {
+    const m = /^#screen\/([a-z]+)$/.exec(location.hash);
+    return m && SCREENS[m[1]] ? m[1] : "home";
+  }
+
   function milanImageUrl(path) {
     return path.split("/").map((part, i, parts) => (i === parts.length - 1 ? encodeURIComponent(part) : part)).join("/");
   }
@@ -473,7 +545,7 @@
     heroContent.appendChild(el("p", { className: "hero-eyebrow", text: c.hero.subtitle }));
     heroContent.appendChild(el("h1", { text: c.hero.title }));
     heroContent.appendChild(el("p", { className: "hero-lead", text: c.hero.lead }));
-    heroContent.appendChild(el("a", { className: "hero-cta", href: "#arrival", text: lang === "it" ? "Inizia qui" : "Start here" }));
+    heroContent.appendChild(el("a", { className: "hero-cta", href: "#topics", text: lang === "it" ? "Inizia qui" : "Start here" }));
 
     hero.appendChild(heroMedia);
     hero.appendChild(heroContent);
@@ -483,15 +555,16 @@
   function render(lang) {
     scrollHandlersBound = false;
     const c = window.GUEST_CONTENT[lang];
+    const route = getRoute();
     document.documentElement.lang = lang;
     document.title = c.meta.title;
 
     const root = document.getElementById("app");
     root.innerHTML = "";
 
-    const header = el("header", { className: "site-header" });
+    const header = el("header", { className: route === "home" ? "site-header" : "site-header site-header--solid" });
     const headerInner = el("div", { className: "container header-inner" });
-    headerInner.appendChild(el("a", { className: "logo", href: "#top", text: "Nineteen Milano" }));
+    headerInner.appendChild(el("a", { className: "logo", href: "#", text: "Nineteen Milano" }));
 
     const menuBtn = el("button", {
       className: "menu-toggle",
@@ -504,8 +577,8 @@
     menuBtn.appendChild(el("span", { className: "menu-toggle__bar" }));
 
     const nav = el("nav", { className: "nav nav--desktop", "aria-label": "Main" });
-    navEntries(c).forEach(([id, label]) => {
-      nav.appendChild(el("a", { href: `#${id}`, text: label }));
+    Object.entries(c.topics).forEach(([id, topic]) => {
+      nav.appendChild(el("a", { href: `#screen/${id}`, text: topic.title }));
     });
 
     const langBtn = el("button", {
@@ -532,28 +605,34 @@
 
     const mobileNav = el("nav", { className: "mobile-nav", "aria-label": "Mobile" });
     const mobileNavPanel = el("div", { className: "mobile-nav__panel" });
-    navEntries(c).forEach(([id, label]) => {
-      mobileNavPanel.appendChild(el("a", { href: `#${id}`, text: label }));
+    Object.entries(c.topics).forEach(([id, topic]) => {
+      mobileNavPanel.appendChild(el("a", { href: `#screen/${id}`, text: topic.title }));
     });
     mobileNav.appendChild(mobileNavPanel);
 
+    // Home: check-in (con la scheda personale agganciata da personal.js) in
+    // cima, poi la griglia dei 6 argomenti. Ogni altro percorso è una
+    // schermata dedicata con solo quell'argomento e un rimando alla home.
     const main = el("main");
-    main.appendChild(renderArrivalChapter(c, lang));
-    main.appendChild(renderOnceInChapter(c, lang));
-    main.appendChild(renderUsefulChapter(c, lang));
-    main.appendChild(renderContactSection(c));
+    if (route === "home") {
+      main.appendChild(renderCheckinSection(c));
+      main.appendChild(renderCardGrid(c));
+    } else {
+      main.appendChild(renderScreenBack(c));
+      SCREENS[route](c, lang).forEach((node) => main.appendChild(node));
+    }
 
     const footer = el("footer", { className: "site-footer" });
     footer.appendChild(el("div", { className: "container", text: c.footer }));
 
     const bottomNav = el("nav", { className: "bottom-nav", "aria-label": "Quick links" });
     Object.entries(c.bottomNav).forEach(([id, label]) => {
-      bottomNav.appendChild(el("a", { href: `#${id}`, text: label }));
+      bottomNav.appendChild(el("a", { href: id === "home" ? "#" : `#screen/${id}`, text: label }));
     });
 
     root.appendChild(header);
     root.appendChild(mobileNav);
-    root.appendChild(renderHero(c, lang));
+    if (route === "home") root.appendChild(renderHero(c, lang));
     root.appendChild(main);
     root.appendChild(footer);
     root.appendChild(bottomNav);
@@ -561,11 +640,24 @@
     // La parte personale (personal.js) si aggancia qui: la guida si ridisegna a
     // ogni cambio lingua e il blocco ospite deve seguirla. Va notificato PRIMA
     // degli effetti di scroll: se quelli falliscono (browser senza matchMedia,
-    // estensioni, jsdom) l'ospite deve comunque vedere la sua parte.
+    // estensioni, jsdom) l'ospite deve comunque vedere la sua parte. Fuori
+    // dalla home #checkin non esiste: personal.js lo gestisce già (no-op).
     document.dispatchEvent(new CustomEvent("guide:rendered", { detail: { lang } }));
 
     bindScrollEffects();
+
+    // Scroll in cima solo quando si cambia davvero schermata, non ai cambi
+    // lingua sulla stessa schermata (altrimenti si perderebbe la posizione).
+    if (route !== lastRoute) window.scrollTo(0, 0);
+    lastRoute = route;
   }
+
+  // Un hashchange dentro la STESSA schermata (es. l'ancora #topics dell'hero)
+  // non deve ridisegnare: lo scroll nativo del browser verso l'ancora
+  // funziona solo se il DOM non viene ricostruito sotto ai suoi piedi.
+  window.addEventListener("hashchange", () => {
+    if (getRoute() !== lastRoute) render(getLang());
+  });
 
   document.addEventListener("DOMContentLoaded", () => render(getLang()));
 })();

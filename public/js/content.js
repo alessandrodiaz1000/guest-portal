@@ -5,24 +5,14 @@ window.GUEST_FEATURES = {
 window.GUEST_CONTENT = {
   it: {
     meta: { title: "Nineteen Milano — Guida per ospiti", lang: "it" },
-    nav: {
-      arrival: "Arrivo",
-      "once-in": "In casa",
-      useful: "Info utili",
-    },
-    chapters: {
-      arrival: {
-        title: "Arrivo",
-        lead: "Check-in, come arrivare e dove parcheggiare.",
-      },
-      "once-in": {
-        title: "In casa",
-        lead: "WiFi e guida all'appartamento.",
-      },
-      useful: {
-        title: "Info utili",
-        lead: "Ristoranti e consigli su Milano.",
-      },
+    backHome: "Torna alla home",
+    topics: {
+      directions: { title: "Come raggiungerci", subtitle: "Il percorso da stazioni e aeroporto." },
+      parking: { title: "Parcheggio", subtitle: "Dove lasciare l'auto vicino a casa." },
+      wifi: { title: "WiFi", subtitle: "Rete e password per restare connessi." },
+      house: { title: "La casa", subtitle: "Elettrodomestici, regole e tutto il necessario." },
+      milan: { title: "Milano", subtitle: "Cosa vedere e dove mangiare nei dintorni." },
+      contact: { title: "Contatti", subtitle: "Siamo qui per qualsiasi necessità." },
     },
     hero: {
       title: "Benvenuti a Nineteen Milano",
@@ -89,28 +79,18 @@ window.GUEST_CONTENT = {
     langLabel: "EN",
     menuOpen: "Menu",
     menuClose: "Chiudi",
-    bottomNav: { arrival: "Arrivo", "once-in": "In casa", useful: "Info" },
+    bottomNav: { home: "Home", house: "Casa", milan: "Milano", contact: "Contatti" },
   },
   en: {
     meta: { title: "Nineteen Milano — Guest Guide", lang: "en" },
-    nav: {
-      arrival: "Arrival",
-      "once-in": "Once in",
-      useful: "Useful info",
-    },
-    chapters: {
-      arrival: {
-        title: "Arrival",
-        lead: "Check-in, how to get here, and parking.",
-      },
-      "once-in": {
-        title: "Once in",
-        lead: "WiFi and apartment guide.",
-      },
-      useful: {
-        title: "Useful info",
-        lead: "Restaurants and Milan tips.",
-      },
+    backHome: "Back to home",
+    topics: {
+      directions: { title: "How to get here", subtitle: "Directions from stations and the airport." },
+      parking: { title: "Parking", subtitle: "Where to leave your car nearby." },
+      wifi: { title: "WiFi", subtitle: "Network and password to stay connected." },
+      house: { title: "The apartment", subtitle: "Appliances, house rules, and everything you need." },
+      milan: { title: "Milan", subtitle: "What to see and where to eat nearby." },
+      contact: { title: "Contact", subtitle: "We're here for anything you need." },
     },
     hero: {
       title: "Welcome to Nineteen Milano",
@@ -177,15 +157,18 @@ window.GUEST_CONTENT = {
     langLabel: "IT",
     menuOpen: "Menu",
     menuClose: "Close",
-    bottomNav: { arrival: "Arrival", "once-in": "Once in", useful: "Info" },
+    bottomNav: { home: "Home", house: "House", milan: "Milan", contact: "Contact" },
   },
   es: {
     meta: { title: "Nineteen Milano — Guía para huéspedes", lang: "es" },
-    nav: { arrival: "Llegada", "once-in": "En casa", useful: "Info útil" },
-    chapters: {
-      arrival: { title: "Llegada", lead: "Entrada, cómo llegar y dónde aparcar." },
-      "once-in": { title: "En casa", lead: "WiFi y guía del apartamento." },
-      useful: { title: "Info útil", lead: "Restaurantes y consejos sobre Milán." },
+    backHome: "Volver al inicio",
+    topics: {
+      directions: { title: "Cómo llegar", subtitle: "Indicaciones desde estaciones y el aeropuerto." },
+      parking: { title: "Aparcamiento", subtitle: "Dónde dejar el coche cerca de casa." },
+      wifi: { title: "WiFi", subtitle: "Red y contraseña para estar conectados." },
+      house: { title: "La casa", subtitle: "Electrodomésticos, normas y todo lo necesario." },
+      milan: { title: "Milán", subtitle: "Qué ver y dónde comer cerca." },
+      contact: { title: "Contacto", subtitle: "Estamos aquí para lo que necesitéis." },
     },
     hero: {
       title: "Bienvenidos a Nineteen Milano",
@@ -232,15 +215,18 @@ window.GUEST_CONTENT = {
     },
     footer: "¡Feliz estancia en Nineteen Milano!",
     langLabel: "FR", menuOpen: "Menú", menuClose: "Cerrar",
-    bottomNav: { arrival: "Llegada", "once-in": "En casa", useful: "Info" },
+    bottomNav: { home: "Inicio", house: "Casa", milan: "Milán", contact: "Contacto" },
   },
   fr: {
     meta: { title: "Nineteen Milano — Guide du voyageur", lang: "fr" },
-    nav: { arrival: "Arrivée", "once-in": "Sur place", useful: "Infos utiles" },
-    chapters: {
-      arrival: { title: "Arrivée", lead: "Arrivée, comment venir et où se garer." },
-      "once-in": { title: "Sur place", lead: "WiFi et guide de l'appartement." },
-      useful: { title: "Infos utiles", lead: "Restaurants et conseils sur Milan." },
+    backHome: "Retour à l'accueil",
+    topics: {
+      directions: { title: "Comment venir", subtitle: "Itinéraires depuis les gares et l'aéroport." },
+      parking: { title: "Stationnement", subtitle: "Où garer la voiture à proximité." },
+      wifi: { title: "WiFi", subtitle: "Réseau et mot de passe pour rester connecté." },
+      house: { title: "L'appartement", subtitle: "Électroménager, règles et tout le nécessaire." },
+      milan: { title: "Milan", subtitle: "Que voir et où manger à proximité." },
+      contact: { title: "Contact", subtitle: "Nous sommes là pour tout besoin." },
     },
     hero: {
       title: "Bienvenue à Nineteen Milano",
@@ -287,15 +273,18 @@ window.GUEST_CONTENT = {
     },
     footer: "Bon séjour à Nineteen Milano !",
     langLabel: "DE", menuOpen: "Menu", menuClose: "Fermer",
-    bottomNav: { arrival: "Arrivée", "once-in": "Sur place", useful: "Infos" },
+    bottomNav: { home: "Accueil", house: "Maison", milan: "Milan", contact: "Contact" },
   },
   de: {
     meta: { title: "Nineteen Milano — Gästeguide", lang: "de" },
-    nav: { arrival: "Ankunft", "once-in": "In der Wohnung", useful: "Nützliches" },
-    chapters: {
-      arrival: { title: "Ankunft", lead: "Check-in, Anfahrt und Parken." },
-      "once-in": { title: "In der Wohnung", lead: "WLAN und Wohnungsguide." },
-      useful: { title: "Nützliches", lead: "Restaurants und Tipps für Mailand." },
+    backHome: "Zurück zur Startseite",
+    topics: {
+      directions: { title: "Anfahrt", subtitle: "Wegbeschreibung ab Bahnhöfen und Flughafen." },
+      parking: { title: "Parken", subtitle: "Wo Sie in der Nähe parken können." },
+      wifi: { title: "WLAN", subtitle: "Netzwerk und Passwort zum Verbinden." },
+      house: { title: "Die Wohnung", subtitle: "Geräte, Hausregeln und alles Wichtige." },
+      milan: { title: "Mailand", subtitle: "Sehenswürdigkeiten und Restaurants in der Nähe." },
+      contact: { title: "Kontakt", subtitle: "Wir sind für alles während Ihres Aufenthalts da." },
     },
     hero: {
       title: "Willkommen im Nineteen Milano",
@@ -342,7 +331,7 @@ window.GUEST_CONTENT = {
     },
     footer: "Einen schönen Aufenthalt im Nineteen Milano!",
     langLabel: "IT", menuOpen: "Menü", menuClose: "Schließen",
-    bottomNav: { arrival: "Ankunft", "once-in": "Wohnung", useful: "Infos" },
+    bottomNav: { home: "Start", house: "Wohnung", milan: "Mailand", contact: "Kontakt" },
   },
 };
 
