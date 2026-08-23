@@ -27,6 +27,7 @@
   var dati = null;
   var erroreRete = false;
   var guidaAperta = false;                    // ha premuto "vai alla guida"
+  var vuoleScheda = false;                    // ha ripremuto per tornare indietro
   var lang = "it";
 
   // ── testi ──────────────────────────────────────────────────────────────
@@ -333,7 +334,10 @@
       // Disabilitato anche mentre un conteggio è in corso: mandare a metà
       // controllo vorrebbe dire farlo premere senza sapere a che punto è.
       invia.disabled = foto.length === 0 || inCorso();
-      var n = foto.length;
+      // Il numero è quello dei DOCUMENTI, non delle foto: due foto che ne
+      // contengono 1 e 2 sono «Invia 3 documenti». Contare le foto direbbe 2 e
+      // non tornerebbe con le barre, che di documenti ne mostrano 3.
+      var n = pendenti();
       invia.textContent = !n ? t("docInvia")
         : n === 1 ? t("docInvia1")
         : fill(t("docInviaN"), { n: n });
@@ -508,6 +512,7 @@
                            text: t("istruzioni") });
     b.addEventListener("click", function () {
       guidaAperta = true;
+      vuoleScheda = false;
       disegna();                       // chiude l'overlay, innesta codice e orario
       var sez = document.getElementById("checkin");
       if (sez) sez.scrollIntoView({ behavior: "smooth", block: "start" });
@@ -530,7 +535,7 @@
 
   function barra() {
     var apri = el("button", { className: "gp-bar-btn", type: "button", text: t("barraApri") });
-    apri.addEventListener("click", function () { guidaAperta = false; disegna(); });
+    apri.addEventListener("click", tornaAllaScheda);
     return el("div", { className: "gp-bar", id: "gp-bar" }, [
       el("span", { text: t("barraManca") }), apri,
     ]);
@@ -539,10 +544,20 @@
   function barraPagamento() {
     var i = dati.imposta;
     var apri = el("button", { className: "gp-bar-btn", type: "button", text: t("barraApri") });
-    apri.addEventListener("click", function () { guidaAperta = false; disegna(); });
+    apri.addEventListener("click", tornaAllaScheda);
     return el("div", { className: "gp-bar gp-bar--pay", id: "gp-bar" }, [
       el("span", { text: t("imposta") + " · € " + i.importo.toFixed(2).replace(".", ",") }), apri,
     ]);
+  }
+
+  /** Riporta alla scheda personale dalla barra in alto. Rimette anche lo scroll
+   *  in cima: l'ospite arriva qui dopo essere sceso nella guida, e senza questo
+   *  l'overlay si apre già scorso a metà. */
+  function tornaAllaScheda() {
+    vuoleScheda = true;
+    guidaAperta = false;
+    disegna();
+    window.scrollTo(0, 0);
   }
 
   function bannerErrore() {
@@ -598,8 +613,12 @@
     pulisci();
     if (!dati) { document.body.appendChild(bannerErrore()); return; }
 
+    // `vuoleScheda` esiste perché la scheda non si apre solo quando MANCA
+    // qualcosa: a documenti completi la barra in alto diventa quella del
+    // pagamento, e il suo tasto deve poter riportare indietro lo stesso. Prima
+    // ridisegnava la stessa barra e sembrava rotto.
     var incompleto = !dati.completo;
-    if (incompleto && !guidaAperta) {
+    if ((incompleto || vuoleScheda) && !guidaAperta) {
       document.body.appendChild(overlay());
       document.body.classList.add("gp-locked");
       return;                                  // la guida resta dietro, non serve altro
