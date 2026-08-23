@@ -1284,6 +1284,24 @@ body.gp-locked { overflow: hidden; }
 .gp-msg--ok { background: #dcfce7; color: #14532d; }
 .gp-msg--err { background: #fee2e2; color: #7f1d1d; }
 
+/* Chip di scelta metodo, dentro la card ambra dell'imposta: sfondo bianco per
+   distinguersi dallo sfondo ambra circostante, non dal --bg crema del resto. */
+.gp-metodi { display: flex; flex-wrap: wrap; gap: 0.45rem; margin: 0.9rem 0 0.2rem; }
+
+.gp-chip {
+  padding: 0.5rem 0.9rem;
+  font: inherit;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  cursor: pointer;
+}
+
+.gp-chip--on { background: var(--text); color: var(--surface); border-color: var(--text); }
+
 .gp-pay { list-style: none; padding: 0; margin: 0.75rem 0 0; }
 /* Una riga per voce, etichetta sopra e valore sotto: su telefono l'IBAN non
    sta di fianco all'etichetta e l'intestatario finiva a capo spezzato. */

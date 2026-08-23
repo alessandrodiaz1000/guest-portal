@@ -57,6 +57,8 @@
       imposta: "Imposta di soggiorno", impostaNota: "Da versare a noi, non è inclusa in quanto hai già pagato.",
       impostaCome: "All'arrivo in contanti, oppure ora con:",
       impostaEsenti: "I minori di 18 anni sono esenti.",
+      impostaComeVuoi: "Come preferisci pagare?",
+      metodoContanti: "Contanti", metodoPaypal: "PayPal", metodoIban: "Bonifico", metodoSatispay: "Satispay",
       giu: "Non riusciamo a caricare i tuoi dati. Scrivici su Airbnb o Booking, oppure su WhatsApp al {tel}.",
       scaduto: "Questo link non è più attivo.",
       etaInGuida: "Hai indicato il tuo arrivo per le <strong>{eta}</strong>.",
@@ -86,6 +88,8 @@
       imposta: "City tax", impostaNota: "Payable to us, not included in what you already paid.",
       impostaCome: "In cash on arrival, or now with:",
       impostaEsenti: "Guests under 18 are exempt.",
+      impostaComeVuoi: "How would you like to pay?",
+      metodoContanti: "Cash", metodoPaypal: "PayPal", metodoIban: "Bank transfer", metodoSatispay: "Satispay",
       giu: "We can't load your details right now. Message us on Airbnb or Booking, or on WhatsApp at {tel}.",
       scaduto: "This link is no longer active.",
       etaInGuida: "You told us you'll arrive at <strong>{eta}</strong>.",
@@ -115,6 +119,8 @@
       imposta: "Tasa turística", impostaNota: "Se paga a nosotros, no está incluida en lo que ya pagaste.",
       impostaCome: "En efectivo al llegar, o ahora con:",
       impostaEsenti: "Los menores de 18 años están exentos.",
+      impostaComeVuoi: "¿Cómo prefieres pagar?",
+      metodoContanti: "Efectivo", metodoPaypal: "PayPal", metodoIban: "Transferencia", metodoSatispay: "Satispay",
       giu: "No podemos cargar tus datos. Escríbenos por Airbnb o Booking, o por WhatsApp al {tel}.",
       scaduto: "Este enlace ya no está activo.",
       etaInGuida: "Nos has indicado que llegas a las <strong>{eta}</strong>.",
@@ -144,6 +150,8 @@
       imposta: "Taxe de séjour", impostaNota: "À régler auprès de nous, non comprise dans ce que vous avez payé.",
       impostaCome: "En espèces à l'arrivée, ou maintenant via :",
       impostaEsenti: "Les moins de 18 ans sont exemptés.",
+      impostaComeVuoi: "Comment préférez-vous payer ?",
+      metodoContanti: "Espèces", metodoPaypal: "PayPal", metodoIban: "Virement", metodoSatispay: "Satispay",
       giu: "Impossible de charger vos informations. Écrivez-nous sur Airbnb ou Booking, ou sur WhatsApp au {tel}.",
       scaduto: "Ce lien n'est plus actif.",
       etaInGuida: "Vous nous avez indiqué une arrivée à <strong>{eta}</strong>.",
@@ -173,6 +181,8 @@
       imposta: "Kurtaxe", impostaNota: "An uns zu zahlen, nicht in Ihrer Zahlung enthalten.",
       impostaCome: "Bar bei Ankunft, oder jetzt über:",
       impostaEsenti: "Unter 18-Jährige sind befreit.",
+      impostaComeVuoi: "Wie möchten Sie bezahlen?",
+      metodoContanti: "Bar", metodoPaypal: "PayPal", metodoIban: "Überweisung", metodoSatispay: "Satispay",
       giu: "Wir können Ihre Daten nicht laden. Schreiben Sie uns über Airbnb oder Booking, oder per WhatsApp an {tel}.",
       scaduto: "Dieser Link ist nicht mehr aktiv.",
       etaInGuida: "Sie haben uns <strong>{eta}</strong> als Ankunftszeit genannt.",
@@ -480,9 +490,57 @@
     return el("div", { className: "gp-card" }, kids);
   }
 
+  /** Chip "Come preferisci pagare?": l'ospite tocca un metodo fra quelli che
+   *  Ale ha configurato (Contanti è sempre disponibile), e la scelta arriva
+   *  sulla pagina Ospiti PRIMA dell'arrivo — invece di scoprirla al check-in
+   *  o aprendo un messaggio da tradurre. Un tocco, non un campo da scrivere. */
   function bloccoImposta() {
     if (!dati.imposta || !dati.imposta.daPagare) return null;
     var i = dati.imposta;
+    var msg = el("p", { className: "gp-msg", hidden: "hidden" });
+
+    var METODI = [
+      { code: "contanti", label: t("metodoContanti") },
+    ];
+    if (i.paypal) METODI.push({ code: "paypal", label: t("metodoPaypal") });
+    if (i.iban) METODI.push({ code: "iban", label: t("metodoIban") });
+    if (i.satispay) METODI.push({ code: "satispay", label: t("metodoSatispay") });
+
+    var busy = false;
+    function scegli(m) {
+      if (busy) return;
+      busy = true;
+      api("/metodo", {
+        method: "POST", headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ metodo: m }),
+      }).then(function (r) {
+        busy = false;
+        if (r && r.ok) { i.metodo = m; ridisegnaChip(); }
+        else {
+          msg.hidden = false; msg.className = "gp-msg gp-msg--err";
+          msg.textContent = fill(t("giu"), { tel: (dati && dati.telefono) || "" });
+        }
+      }).catch(function () {
+        busy = false;
+        msg.hidden = false; msg.className = "gp-msg gp-msg--err";
+        msg.textContent = fill(t("giu"), { tel: (dati && dati.telefono) || "" });
+      });
+    }
+
+    var chips = el("div", { className: "gp-metodi" });
+    function ridisegnaChip() {
+      chips.innerHTML = "";
+      METODI.forEach(function (m) {
+        var b = el("button", {
+          className: "gp-chip" + (i.metodo === m.code ? " gp-chip--on" : ""),
+          type: "button", text: m.label,
+        });
+        b.addEventListener("click", function () { scegli(m.code); });
+        chips.appendChild(b);
+      });
+    }
+    ridisegnaChip();
+
     // Etichetta sopra, valore sotto: su telefono l'IBAN è troppo lungo per stare
     // di fianco, e l'intestatario finiva a capo spezzato in mezzo alla stringa.
     var lista = el("ul", { className: "gp-pay" });
@@ -495,6 +553,8 @@
       el("h3", { text: t("imposta") }),
       el("div", { className: "gp-amount", text: "€ " + i.importo.toFixed(2).replace(".", ",") }),
       el("p", { className: "gp-note", text: t("impostaNota") }),
+      el("p", { className: "gp-note", text: t("impostaComeVuoi") }),
+      chips, msg,
       el("p", { className: "gp-note", text: t("impostaCome") }),
       lista,
       el("p", { className: "gp-note", text: t("impostaEsenti") }),
