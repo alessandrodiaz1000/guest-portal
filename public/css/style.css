@@ -1311,19 +1311,35 @@ body.gp-locked { overflow: hidden; }
 /* Una riga per voce, etichetta sopra e valore sotto: su telefono l'IBAN non
    sta di fianco all'etichetta e l'intestatario finiva a capo spezzato. */
 .gp-pay li {
-  display: block;
+  display: flex; align-items: center; flex-wrap: wrap; gap: 0.15rem 0.6rem;
   padding: 0.7rem 0; border-top: 1px solid rgba(0,0,0,0.08); font-size: 0.9rem;
 }
 .gp-pay b {
-  display: block; margin-bottom: 0.2rem;
+  flex: 0 0 100%;
   font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted);
 }
 .gp-pay code {
-  display: block;
+  flex: 1 1 auto; min-width: 0;
   font-family: ui-monospace, Menlo, monospace; font-size: 0.9rem;
   letter-spacing: 0.02em; word-break: break-all;
 }
-.gp-pay em { display: block; margin-top: 0.15rem; font-style: normal; font-size: 0.82rem; color: var(--muted); }
+.gp-pay em { flex: 1 1 auto; min-width: 0; font-style: normal; font-size: 0.9rem; }
+.gp-pay a { flex: 1 1 auto; min-width: 0; word-break: break-all; }
+
+/* Bottone copia: sulla stessa riga del valore, non sotto — su un telefono ogni
+   riga in più è un tap in più per raggiungerlo. */
+.gp-copia {
+  flex: 0 0 auto;
+  padding: 0.35rem 0.7rem;
+  font: inherit;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--text);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  cursor: pointer;
+}
 .gp-pay a { display: block; word-break: break-all; }
 
 /* Una barra per ospite: si riempie quando il Mini ha RICONOSCIUTO il suo

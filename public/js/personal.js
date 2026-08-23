@@ -59,6 +59,7 @@
       impostaComeVuoi: "Come preferisci pagare?",
       metodoContanti: "Contanti", metodoPaypal: "PayPal", metodoIban: "Bonifico", metodoSatispay: "Satispay",
       metodoAltro: "Altro",
+      copia: "Copia", copiato: "Copiato", intestatario: "Intestatario",
       impostaContantiOk: "Va bene: lascia il contante sul tavolo dell'appartamento, spesso non riusciamo a vederci di persona.",
       impostaAltroTesto: "Scrivici su Airbnb, Booking o WhatsApp al {tel} per altre modalità di pagamento.",
       giu: "Non riusciamo a caricare i tuoi dati. Scrivici su Airbnb o Booking, oppure su WhatsApp al {tel}.",
@@ -92,6 +93,7 @@
       impostaComeVuoi: "How would you like to pay?",
       metodoContanti: "Cash", metodoPaypal: "PayPal", metodoIban: "Bank transfer", metodoSatispay: "Satispay",
       metodoAltro: "Other",
+      copia: "Copy", copiato: "Copied", intestatario: "Account holder",
       impostaContantiOk: "Great — please leave the cash on the table in the apartment. We often can't meet in person.",
       impostaAltroTesto: "Message us on Airbnb, Booking or WhatsApp at {tel} for other payment options.",
       giu: "We can't load your details right now. Message us on Airbnb or Booking, or on WhatsApp at {tel}.",
@@ -125,6 +127,7 @@
       impostaComeVuoi: "¿Cómo prefieres pagar?",
       metodoContanti: "Efectivo", metodoPaypal: "PayPal", metodoIban: "Transferencia", metodoSatispay: "Satispay",
       metodoAltro: "Otro",
+      copia: "Copiar", copiato: "Copiado", intestatario: "Titular",
       impostaContantiOk: "Perfecto: deja el efectivo sobre la mesa del apartamento. Muchas veces no podemos vernos en persona.",
       impostaAltroTesto: "Escríbenos por Airbnb, Booking o WhatsApp al {tel} para otras formas de pago.",
       giu: "No podemos cargar tus datos. Escríbenos por Airbnb o Booking, o por WhatsApp al {tel}.",
@@ -158,6 +161,7 @@
       impostaComeVuoi: "Comment préférez-vous payer ?",
       metodoContanti: "Espèces", metodoPaypal: "PayPal", metodoIban: "Virement", metodoSatispay: "Satispay",
       metodoAltro: "Autre",
+      copia: "Copier", copiato: "Copié", intestatario: "Titulaire",
       impostaContantiOk: "Très bien : laissez les espèces sur la table de l'appartement. Nous ne pouvons souvent pas nous voir en personne.",
       impostaAltroTesto: "Écrivez-nous sur Airbnb, Booking ou WhatsApp au {tel} pour d'autres moyens de paiement.",
       giu: "Impossible de charger vos informations. Écrivez-nous sur Airbnb ou Booking, ou sur WhatsApp au {tel}.",
@@ -191,6 +195,7 @@
       impostaComeVuoi: "Wie möchten Sie bezahlen?",
       metodoContanti: "Bar", metodoPaypal: "PayPal", metodoIban: "Überweisung", metodoSatispay: "Satispay",
       metodoAltro: "Andere",
+      copia: "Kopieren", copiato: "Kopiert", intestatario: "Kontoinhaber",
       impostaContantiOk: "In Ordnung: Bitte legen Sie das Bargeld auf den Tisch in der Wohnung. Wir sehen uns oft nicht persönlich.",
       impostaAltroTesto: "Schreiben Sie uns über Airbnb, Booking oder WhatsApp an {tel} für andere Zahlungsarten.",
       giu: "Wir können Ihre Daten nicht laden. Schreiben Sie uns über Airbnb oder Booking, oder per WhatsApp an {tel}.",
@@ -519,18 +524,48 @@
                        text: fill(t("impostaAltroTesto"), { tel: (dati && dati.telefono) || "" }) });
     }
     var lista = el("ul", { className: "gp-pay" });
-    if (metodo === "paypal" && i.paypal) lista.appendChild(el("li", {
-      html: "<b>PayPal</b><a href=\"" + i.paypal + "\" target=\"_blank\" rel=\"noopener\">" + i.paypal + "</a>" }));
-    if (metodo === "iban" && i.iban) lista.appendChild(el("li", {
-      html: "<b>IBAN</b><code>" + i.iban + "</code>"
-            + (i.intestatario ? "<em>" + i.intestatario + "</em>" : "") }));
+    // Bottone che copia una stringa negli appunti e lo dice per due secondi.
+    // Stesso pattern del WiFi in app.js: se l'API è negata (Safari privato,
+    // permesso rifiutato) mostra il testo grezzo invece di fallire in silenzio
+    // — un ospite col telefono in mano deve poter comunque leggere il numero.
+    function bottoneCopia(valore) {
+      var b = el("button", { className: "gp-copia", type: "button", text: t("copia") });
+      b.addEventListener("click", function () {
+        (navigator.clipboard ? navigator.clipboard.writeText(valore) : Promise.reject())
+          .then(function () {
+            b.textContent = t("copiato");
+            setTimeout(function () { b.textContent = t("copia"); }, 2000);
+          })
+          .catch(function () { b.textContent = valore; });
+      });
+      return b;
+    }
+
+    if (metodo === "paypal" && i.paypal) lista.appendChild(el("li", {}, [
+      el("b", { text: "PayPal" }),
+      el("a", { href: i.paypal, target: "_blank", rel: "noopener", text: i.paypal }),
+    ]));
+    // IBAN e intestatario: un bottone COPIA per ciascuno, perché su un bonifico
+    // servono entrambi e chi digita a mano sul telefono sbaglia facilmente un
+    // carattere in mezzo a 27 dell'IBAN.
+    if (metodo === "iban" && i.iban) {
+      lista.appendChild(el("li", {}, [
+        el("b", { text: "IBAN" }), el("code", { text: i.iban }), bottoneCopia(i.iban),
+      ]));
+      if (i.intestatario) lista.appendChild(el("li", {}, [
+        el("b", { text: t("intestatario") }),
+        el("em", { text: i.intestatario }), bottoneCopia(i.intestatario),
+      ]));
+    }
     // Satispay è un handle (@nome), non un URL: se un giorno diventasse un link
     // (es. satispay.com/pay/...) il ramo con <a> lo gestisce da solo, come già
     // fa la pagina di fallback sul Mini per lo stesso dato.
-    if (metodo === "satispay" && i.satispay) lista.appendChild(el("li", {
-      html: "<b>Satispay</b>" + (/^https?:\/\//.test(i.satispay)
-        ? "<a href=\"" + i.satispay + "\" target=\"_blank\" rel=\"noopener\">" + i.satispay + "</a>"
-        : "<code>" + i.satispay + "</code>") }));
+    if (metodo === "satispay" && i.satispay) lista.appendChild(el("li", {}, [
+      el("b", { text: "Satispay" }),
+      /^https?:\/\//.test(i.satispay)
+        ? el("a", { href: i.satispay, target: "_blank", rel: "noopener", text: i.satispay })
+        : el("code", { text: i.satispay }),
+    ]));
     return lista;
   }
 
