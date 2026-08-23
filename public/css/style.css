@@ -1502,7 +1502,14 @@ body.gp-locked { overflow: hidden; }
   border-radius: 999px;
   cursor: pointer;
 }
-body:has(.gp-bar) .site-header { top: 2.6rem; }
+/* L'header fisso deve iniziare esattamente dove finisce la barra promemoria,
+   non un rem indovinato: la barra è alta quanto il notch del telefono
+   (--safe-top varia per device) più il testo, che varia per lingua ("Complete"
+   è corto, "Vervollständigen" no). Un numero fisso ci azzeccava solo per
+   coincidenza su un device e sbagliava sugli altri — l'header finiva
+   sovrapposto a metà della barra. `--gp-bar-h` la misura personal.js appena la
+   barra è nel DOM. */
+body:has(.gp-bar) .site-header { top: var(--gp-bar-h, 2.6rem); }
 
 /* Innesti dentro la guida (solo con token) */
 .gp-code-inline {

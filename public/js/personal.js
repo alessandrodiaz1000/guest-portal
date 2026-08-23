@@ -742,9 +742,24 @@
     document.body.classList.remove("gp-locked");
   }
 
+  /** Misura la barra promemoria APPENA COM'È nel DOM, invece di un rem
+   *  indovinato in CSS: l'altezza vera dipende dal notch del telefono
+   *  (--safe-top) e dalla lunghezza del testo, che cambia per lingua. Un
+   *  numero fisso funzionava per coincidenza su un device e sull'header
+   *  che finiva sovrapposto a metà della barra su altri — bug segnalato da
+   *  screenshot. `offsetHeight` forza un reflow sincrono, ma qui gira solo ai
+   *  cambi di stato (orario salvato, documento caricato…), mai a ogni frame. */
+  function misuraBarra() {
+    var bar = document.getElementById("gp-bar");
+    document.documentElement.style.setProperty("--gp-bar-h", bar ? bar.offsetHeight + "px" : "0px");
+  }
+  // Il notch cambia dimensione ruotando il telefono, e il testo può andare a
+  // capo su uno schermo più stretto: si rimisura, non si fida della vecchia.
+  window.addEventListener("resize", misuraBarra);
+
   function disegna() {
     pulisci();
-    if (!dati) { document.body.appendChild(bannerErrore()); return; }
+    if (!dati) { document.body.appendChild(bannerErrore()); misuraBarra(); return; }
 
     // `vuoleScheda` esiste perché la scheda non si apre solo quando MANCA
     // qualcosa: a documenti completi la barra in alto diventa quella del
@@ -754,10 +769,12 @@
     if ((incompleto || vuoleScheda) && !guidaAperta) {
       document.body.appendChild(overlay());
       document.body.classList.add("gp-locked");
+      misuraBarra();                            // nessuna barra: --gp-bar-h torna a 0
       return;                                  // la guida resta dietro, non serve altro
     }
     if (incompleto) document.body.appendChild(barra());
     else if (dati.imposta && dati.imposta.daPagare) document.body.appendChild(barraPagamento());
+    misuraBarra();
 
     codiceNellaGuida();
     etaNellaGuida();
