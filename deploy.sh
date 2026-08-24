@@ -30,6 +30,12 @@ mkdir -p "$DEPLOY"
 cp -R "$ROOT/public/." "$DEPLOY/"
 find "$DEPLOY" -name '.DS_Store' -delete
 
+# Sito statico puro: niente Jekyll. Senza questo file GitHub Pages prova
+# comunque a processarlo come Jekyll e la build può fallire silenziosamente
+# ("Page build failed." senza altro dettaglio) su contenuti che a Jekyll
+# non piacciono, anche se prima erano passati.
+touch "$DEPLOY/.nojekyll"
+
 # Cache-busting: GitHub Pages serve css/js con max-age=600, quindi dopo un
 # deploy i browser continuano a usare i file vecchi per dieci minuti e sembra
 # che il fix non sia passato. La marca temporale nel querystring li forza a
