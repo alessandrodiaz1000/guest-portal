@@ -291,13 +291,20 @@
     scrollHandlersBound = true;
 
     const header = document.querySelector(".site-header");
+    const heroEl = document.querySelector(".hero");
     const heroImg = document.querySelector(".hero__img");
     const isCoarsePointer = window.matchMedia("(pointer: coarse)").matches;
     const isNarrow = window.matchMedia("(max-width: 768px)").matches;
 
+    // L'header resta sempre trasparente: il testo passa da chiaro a scuro
+    // quando smette di stare sopra la foto dell'hero, non dopo un tot di
+    // scroll fisso — con un hero più basso 24px lasciava il testo scuro
+    // ancora sopra la foto, illeggibile.
     const onScroll = () => {
       const y = window.scrollY;
-      if (header) header.classList.toggle("is-scrolled", y > 24);
+      if (header && heroEl) {
+        header.classList.toggle("is-scrolled", heroEl.getBoundingClientRect().bottom <= header.offsetHeight);
+      }
       if (heroImg && !isCoarsePointer && !isNarrow) {
         const offset = Math.min(y * 0.35, 120);
         heroImg.style.transform = `translate3d(0, ${offset}px, 0) scale(${1 + y * 0.00015})`;
@@ -451,6 +458,37 @@
     return section;
   }
 
+  // Nomi propri: non si traducono, restano uguali in ogni lingua del sito.
+  const LANG_NAMES = { it: "Italiano", en: "English", es: "Español", fr: "Français", de: "Deutsch" };
+
+  function renderLanguagesScreen(c, lang) {
+    const section = el("section", { className: "section-block reveal" });
+    const inner = el("div", { className: "container" });
+    inner.appendChild(el("h2", { className: "section-title", text: c.language }));
+    const list = el("div", { className: "lang-list" });
+    Object.keys(window.GUEST_CONTENT).forEach((id) => {
+      const isActive = id === lang;
+      const row = el("button", {
+        className: `lang-row${isActive ? " is-active" : ""}`,
+        type: "button",
+      });
+      row.appendChild(el("span", { className: "lang-row__name", text: LANG_NAMES[id] || id.toUpperCase() }));
+      if (isActive) {
+        row.appendChild(el("span", {
+          className: "lang-row__check",
+          html: '<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" ' +
+            'stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' +
+            '<polyline points="20 6 9 17 4 12"></polyline></svg>',
+        }));
+      }
+      row.addEventListener("click", () => setLang(id));
+      list.appendChild(row);
+    });
+    inner.appendChild(list);
+    section.appendChild(inner);
+    return section;
+  }
+
   function renderScreenBack(c) {
     const bar = el("div", { className: "screen-back" });
     const inner = el("div", { className: "container" });
@@ -479,7 +517,11 @@
     contact: (c, lang) => [renderContactSection(c), renderUsefulContactsSection(lang)],
   };
 
+  // "lang" non è tra le card di casa (SCREENS): ci si arriva solo dal
+  // pulsante lingua in header, come le altre schermate ha solo la barra
+  // "indietro" sopra al contenuto.
   function getRoute() {
+    if (location.hash === "#screen/lang") return "lang";
     const m = /^#screen\/([a-z]+)$/.exec(location.hash);
     return m && SCREENS[m[1]] ? m[1] : "home";
   }
@@ -550,22 +592,15 @@
     const headerInner = el("div", { className: "container header-inner" });
     headerInner.appendChild(el("a", { className: "logo", href: "#", text: "Nineteen Milano" }));
 
+    // Mostra la lingua ATTUALE (non più la prossima del ciclo): apre la
+    // pagina "Lingua" invece di ciclare tra le 5 a furia di tap.
     const langBtn = el("button", {
       className: "lang-toggle",
       type: "button",
-      "aria-label": "Switch language",
-      // Mostra la PROSSIMA lingua del ciclo: con 5 lingue un `langLabel` fisso
-      // scritto nel contenuto mentirebbe appena se ne aggiunge una.
-      text: (function () {
-        const ls = Object.keys(window.GUEST_CONTENT);
-        return ls[(ls.indexOf(lang) + 1) % ls.length].toUpperCase();
-      })(),
+      "aria-label": "Change language",
+      text: lang.toUpperCase(),
     });
-    // Cicla su TUTTE le lingue caricate (it/en/es/fr/de), non più solo it↔en.
-    langBtn.addEventListener("click", () => {
-      const langs = Object.keys(window.GUEST_CONTENT);
-      setLang(langs[(langs.indexOf(lang) + 1) % langs.length]);
-    });
+    langBtn.addEventListener("click", () => { location.hash = "#screen/lang"; });
 
     headerInner.appendChild(langBtn);
     header.appendChild(headerInner);
@@ -576,6 +611,9 @@
     const main = el("main");
     if (route === "home") {
       main.appendChild(renderCardGrid(c));
+    } else if (route === "lang") {
+      main.appendChild(renderScreenBack(c));
+      main.appendChild(renderLanguagesScreen(c, lang));
     } else {
       main.appendChild(renderScreenBack(c));
       SCREENS[route](c, lang).forEach((node) => main.appendChild(node));

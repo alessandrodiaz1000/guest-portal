@@ -6,6 +6,7 @@ window.GUEST_CONTENT = {
   it: {
     meta: { title: "Nineteen Milano — Guida per ospiti", lang: "it" },
     backHome: "Torna alla home",
+    language: "Lingua",
     topics: {
       checkin: { title: "Check-in", subtitle: "Come entrare in autonomia in appartamento." },
       directions: { title: "Come raggiungerci", subtitle: "Il percorso da stazioni, aeroporto e dove parcheggiare." },
@@ -81,6 +82,7 @@ window.GUEST_CONTENT = {
   en: {
     meta: { title: "Nineteen Milano — Guest Guide", lang: "en" },
     backHome: "Back to home",
+    language: "Language",
     topics: {
       checkin: { title: "Check-in", subtitle: "How to get into the apartment on your own." },
       directions: { title: "How to get here", subtitle: "Directions from stations, the airport, and where to park." },
@@ -156,6 +158,7 @@ window.GUEST_CONTENT = {
   es: {
     meta: { title: "Nineteen Milano — Guía para huéspedes", lang: "es" },
     backHome: "Volver al inicio",
+    language: "Idioma",
     topics: {
       checkin: { title: "Entrada", subtitle: "Cómo entrar al apartamento por vuestra cuenta." },
       directions: { title: "Cómo llegar", subtitle: "Indicaciones desde estaciones, aeropuerto y dónde aparcar." },
@@ -213,6 +216,7 @@ window.GUEST_CONTENT = {
   fr: {
     meta: { title: "Nineteen Milano — Guide du voyageur", lang: "fr" },
     backHome: "Retour à l'accueil",
+    language: "Langue",
     topics: {
       checkin: { title: "Arrivée", subtitle: "Comment entrer seul dans l'appartement." },
       directions: { title: "Comment venir", subtitle: "Itinéraires depuis les gares, l'aéroport et où se garer." },
@@ -270,6 +274,7 @@ window.GUEST_CONTENT = {
   de: {
     meta: { title: "Nineteen Milano — Gästeguide", lang: "de" },
     backHome: "Zurück zur Startseite",
+    language: "Sprache",
     topics: {
       checkin: { title: "Check-in", subtitle: "So kommen Sie selbstständig in die Wohnung." },
       directions: { title: "Anfahrt", subtitle: "Wegbeschreibung ab Bahnhöfen, Flughafen und Parkmöglichkeiten." },
