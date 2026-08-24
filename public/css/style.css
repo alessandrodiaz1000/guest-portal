@@ -349,28 +349,6 @@ body.menu-open .mobile-nav { display: block; }
   line-height: 1.5;
 }
 
-.hero-cta {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 44px;
-  padding: 0.7rem 1.35rem;
-  border-radius: 999px;
-  background: #fafaf9;
-  color: var(--text);
-  text-decoration: none;
-  font-size: 0.9375rem;
-  font-weight: 600;
-  transition: transform 0.15s, box-shadow 0.15s;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
-  -webkit-tap-highlight-color: transparent;
-}
-
-.hero-cta:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.28);
-}
-
 /* ── Sections ── */
 .section-block {
   padding: 2.75rem 0;

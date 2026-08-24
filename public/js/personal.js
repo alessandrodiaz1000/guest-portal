@@ -632,20 +632,21 @@
   }
 
   // ── stati ──────────────────────────────────────────────────────────────
-  /** Manda alla sezione check-in della guida, dove `codiceNellaGuida()` ha già
+  /** Manda alla schermata check-in della guida, dove `codiceNellaGuida()` ha già
    *  innestato il codice d'accesso. È lì che il codice serve — davanti alla
    *  porta — non in cima a un modulo da compilare. Sostituisce anche il vecchio
    *  link «vai direttamente alla guida»: due uscite verso lo stesso posto, una
-   *  sotto l'altra, erano solo rumore. */
+   *  sotto l'altra, erano solo rumore. Dalla home a card il check-in è una
+   *  schermata a sé (#screen/checkin), non più una sezione sempre in pagina:
+   *  ci si naviga via hash invece di fare scrollIntoView. */
   function bottoneIstruzioni() {
     var b = el("button", { className: "gp-btn gp-istruzioni", type: "button",
                            text: t("istruzioni") });
     b.addEventListener("click", function () {
       guidaAperta = true;
       vuoleScheda = false;
-      disegna();                       // chiude l'overlay, innesta codice e orario
-      var sez = document.getElementById("checkin");
-      if (sez) sez.scrollIntoView({ behavior: "smooth", block: "start" });
+      disegna();                       // chiude l'overlay; innesta subito se già lì
+      location.hash = "#screen/checkin";
     });
     return b;
   }

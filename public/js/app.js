@@ -428,6 +428,8 @@
     const attrs = 'viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" ' +
       'stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"';
     const shapes = {
+      checkin: '<rect x="6" y="3" width="12" height="18" rx="1"></rect>' +
+        '<circle cx="14.5" cy="12" r="1" fill="currentColor" stroke="none"></circle>',
       directions: '<circle cx="12" cy="10" r="3"></circle>' +
         '<path d="M12 2a8 8 0 0 0-8 8c0 5.25 8 12 8 12s8-6.75 8-12a8 8 0 0 0-8-8z"></path>',
       parking: '<circle cx="12" cy="12" r="9"></circle>' +
@@ -482,8 +484,8 @@
   // Ogni schermata è una o più sezioni già esistenti, solo riassemblate: il
   // contenuto di ciascuna non cambia, cambia solo come viene raggiunto.
   const SCREENS = {
-    directions: (c, lang) => [renderDirectionsSection(lang), renderTransportSection(lang)],
-    parking: (c, lang) => [renderParkingSection(c)],
+    checkin: (c, lang) => [renderCheckinSection(c)],
+    directions: (c, lang) => [renderDirectionsSection(lang), renderParkingSection(c), renderTransportSection(lang)],
     wifi: (c, lang) => [renderWifiSection(c)],
     house: (c, lang) => {
       const nodes = [renderGuideSection(lang)];
@@ -545,7 +547,6 @@
     heroContent.appendChild(el("p", { className: "hero-eyebrow", text: c.hero.subtitle }));
     heroContent.appendChild(el("h1", { text: c.hero.title }));
     heroContent.appendChild(el("p", { className: "hero-lead", text: c.hero.lead }));
-    heroContent.appendChild(el("a", { className: "hero-cta", href: "#topics", text: lang === "it" ? "Inizia qui" : "Start here" }));
 
     hero.appendChild(heroMedia);
     hero.appendChild(heroContent);
@@ -610,12 +611,11 @@
     });
     mobileNav.appendChild(mobileNavPanel);
 
-    // Home: check-in (con la scheda personale agganciata da personal.js) in
-    // cima, poi la griglia dei 6 argomenti. Ogni altro percorso è una
-    // schermata dedicata con solo quell'argomento e un rimando alla home.
+    // Home: solo la griglia degli argomenti (check-in incluso, come le
+    // altre card). Ogni percorso è una schermata dedicata con solo quel
+    // contenuto e un rimando alla home.
     const main = el("main");
     if (route === "home") {
-      main.appendChild(renderCheckinSection(c));
       main.appendChild(renderCardGrid(c));
     } else {
       main.appendChild(renderScreenBack(c));
