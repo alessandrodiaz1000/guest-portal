@@ -13,7 +13,6 @@
   --safe-top: env(safe-area-inset-top, 0px);
   --safe-bottom: env(safe-area-inset-bottom, 0px);
   --header-h: 3.25rem;
-  --bottom-nav-h: 3.75rem;
 }
 
 *, *::before, *::after { box-sizing: border-box; }
@@ -31,10 +30,7 @@ body {
   background: var(--bg);
   -webkit-font-smoothing: antialiased;
   overflow-x: hidden;
-  padding-bottom: calc(var(--bottom-nav-h) + var(--safe-bottom));
 }
-
-body.menu-open { overflow: hidden; }
 
 [id] { scroll-margin-top: calc(var(--header-h) + var(--safe-top) + 0.5rem); }
 
@@ -82,27 +78,6 @@ body.menu-open { overflow: hidden; }
 .site-header.is-scrolled .logo,
 .site-header--solid .logo { color: var(--text); }
 
-.nav--desktop {
-  display: none;
-  gap: 0.25rem 1.25rem;
-  flex-wrap: wrap;
-  flex: 1;
-  justify-content: center;
-}
-
-.nav--desktop a {
-  color: rgba(250, 250, 249, 0.85);
-  text-decoration: none;
-  font-size: 0.8125rem;
-  font-weight: 500;
-  letter-spacing: 0.02em;
-  transition: color 0.2s;
-}
-
-.site-header.is-scrolled .nav--desktop a,
-.site-header--solid .nav--desktop a { color: var(--muted); }
-.nav--desktop a:hover { color: var(--accent); }
-
 .lang-toggle {
   margin-left: auto;
   border: 1px solid rgba(250, 250, 249, 0.35);
@@ -132,117 +107,7 @@ body.menu-open { overflow: hidden; }
   color: var(--text);
 }
 
-.menu-toggle {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  gap: 5px;
-  width: 44px;
-  height: 44px;
-  margin-left: auto;
-  margin-right: 0.25rem;
-  border: none;
-  background: rgba(28, 25, 23, 0.35);
-  border-radius: 12px;
-  cursor: pointer;
-  backdrop-filter: blur(6px);
-}
-
-.menu-toggle__bar {
-  display: block;
-  width: 18px;
-  height: 2px;
-  margin-inline: auto;
-  background: #fafaf9;
-  border-radius: 1px;
-  transition: transform 0.2s, opacity 0.2s;
-}
-
-.site-header.is-scrolled .menu-toggle,
-.site-header--solid .menu-toggle {
-  background: var(--surface);
-  border: 1px solid var(--border);
-}
-
-.site-header.is-scrolled .menu-toggle__bar,
-.site-header--solid .menu-toggle__bar { background: var(--text); }
-
-body.menu-open .menu-toggle__bar:nth-child(1) { transform: translateY(7px) rotate(45deg); }
-body.menu-open .menu-toggle__bar:nth-child(2) { opacity: 0; }
-body.menu-open .menu-toggle__bar:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
-
-.mobile-nav {
-  display: none;
-  position: fixed;
-  inset: 0;
-  z-index: 190;
-  background: rgba(20, 18, 16, 0.55);
-  backdrop-filter: blur(4px);
-}
-
-body.menu-open .mobile-nav { display: block; }
-
-.mobile-nav__panel {
-  position: absolute;
-  top: calc(var(--header-h) + var(--safe-top));
-  left: 0;
-  right: 0;
-  background: var(--surface);
-  border-bottom: 1px solid var(--border);
-  padding: 0.5rem 1rem 1rem;
-  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.12);
-}
-
-.mobile-nav__panel a {
-  display: block;
-  padding: 0.9rem 0.5rem;
-  font-size: 1.0625rem;
-  font-weight: 500;
-  color: var(--text);
-  text-decoration: none;
-  border-bottom: 1px solid var(--border);
-}
-
-.mobile-nav__panel a:last-child { border-bottom: none; }
-
-.bottom-nav {
-  display: flex;
-  position: fixed;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  z-index: 200;
-  background: rgba(255, 255, 255, 0.94);
-  backdrop-filter: blur(14px);
-  border-top: 1px solid var(--border);
-  padding-bottom: var(--safe-bottom);
-  box-shadow: 0 -4px 24px rgba(28, 25, 23, 0.08);
-}
-
-.bottom-nav a {
-  flex: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-height: var(--bottom-nav-h);
-  padding: 0.5rem 0.25rem;
-  font-size: 0.6875rem;
-  font-weight: 600;
-  letter-spacing: 0.02em;
-  text-transform: uppercase;
-  color: var(--muted);
-  text-decoration: none;
-  -webkit-tap-highlight-color: transparent;
-}
-
-.bottom-nav a:active { color: var(--accent); background: var(--accent-soft); }
-
 @media (min-width: 768px) {
-  body { padding-bottom: 0; }
-  .nav--desktop { display: flex; }
-  .menu-toggle { display: none; }
-  .mobile-nav { display: none !important; }
-  .bottom-nav { display: none; }
   .site-footer { padding-bottom: 2rem; }
 }
 

@@ -337,23 +337,6 @@
         track.scrollLeft += e.deltaY;
       }, { passive: false });
     });
-
-    const menuBtn = document.querySelector(".menu-toggle");
-    const mobileNav = document.querySelector(".mobile-nav");
-    const closeMenu = () => {
-      document.body.classList.remove("menu-open");
-      if (menuBtn) menuBtn.setAttribute("aria-expanded", "false");
-    };
-    if (menuBtn && mobileNav) {
-      menuBtn.addEventListener("click", () => {
-        const open = document.body.classList.toggle("menu-open");
-        menuBtn.setAttribute("aria-expanded", open ? "true" : "false");
-      });
-      mobileNav.querySelectorAll("a").forEach((a) => a.addEventListener("click", closeMenu));
-      mobileNav.addEventListener("click", (e) => {
-        if (e.target === mobileNav) closeMenu();
-      });
-    }
   }
 
   function renderGuideBlock(block) {
@@ -567,21 +550,6 @@
     const headerInner = el("div", { className: "container header-inner" });
     headerInner.appendChild(el("a", { className: "logo", href: "#", text: "Nineteen Milano" }));
 
-    const menuBtn = el("button", {
-      className: "menu-toggle",
-      type: "button",
-      "aria-label": c.menuOpen,
-      "aria-expanded": "false",
-    });
-    menuBtn.appendChild(el("span", { className: "menu-toggle__bar" }));
-    menuBtn.appendChild(el("span", { className: "menu-toggle__bar" }));
-    menuBtn.appendChild(el("span", { className: "menu-toggle__bar" }));
-
-    const nav = el("nav", { className: "nav nav--desktop", "aria-label": "Main" });
-    Object.entries(c.topics).forEach(([id, topic]) => {
-      nav.appendChild(el("a", { href: `#screen/${id}`, text: topic.title }));
-    });
-
     const langBtn = el("button", {
       className: "lang-toggle",
       type: "button",
@@ -599,17 +567,8 @@
       setLang(langs[(langs.indexOf(lang) + 1) % langs.length]);
     });
 
-    headerInner.appendChild(menuBtn);
-    headerInner.appendChild(nav);
     headerInner.appendChild(langBtn);
     header.appendChild(headerInner);
-
-    const mobileNav = el("nav", { className: "mobile-nav", "aria-label": "Mobile" });
-    const mobileNavPanel = el("div", { className: "mobile-nav__panel" });
-    Object.entries(c.topics).forEach(([id, topic]) => {
-      mobileNavPanel.appendChild(el("a", { href: `#screen/${id}`, text: topic.title }));
-    });
-    mobileNav.appendChild(mobileNavPanel);
 
     // Home: solo la griglia degli argomenti (check-in incluso, come le
     // altre card). Ogni percorso è una schermata dedicata con solo quel
@@ -625,17 +584,10 @@
     const footer = el("footer", { className: "site-footer" });
     footer.appendChild(el("div", { className: "container", text: c.footer }));
 
-    const bottomNav = el("nav", { className: "bottom-nav", "aria-label": "Quick links" });
-    Object.entries(c.bottomNav).forEach(([id, label]) => {
-      bottomNav.appendChild(el("a", { href: id === "home" ? "#" : `#screen/${id}`, text: label }));
-    });
-
     root.appendChild(header);
-    root.appendChild(mobileNav);
     if (route === "home") root.appendChild(renderHero(c, lang));
     root.appendChild(main);
     root.appendChild(footer);
-    root.appendChild(bottomNav);
 
     // La parte personale (personal.js) si aggancia qui: la guida si ridisegna a
     // ogni cambio lingua e il blocco ospite deve seguirla. Va notificato PRIMA

@@ -77,9 +77,6 @@ window.GUEST_CONTENT = {
     },
     footer: "Buon soggiorno a Nineteen Milano!",
     langLabel: "EN",
-    menuOpen: "Menu",
-    menuClose: "Chiudi",
-    bottomNav: { home: "Home", house: "Casa", milan: "Milano", contact: "Contatti" },
   },
   en: {
     meta: { title: "Nineteen Milano — Guest Guide", lang: "en" },
@@ -155,9 +152,6 @@ window.GUEST_CONTENT = {
     },
     footer: "Enjoy your stay at Nineteen Milano!",
     langLabel: "IT",
-    menuOpen: "Menu",
-    menuClose: "Close",
-    bottomNav: { home: "Home", house: "House", milan: "Milan", contact: "Contact" },
   },
   es: {
     meta: { title: "Nineteen Milano — Guía para huéspedes", lang: "es" },
@@ -214,8 +208,7 @@ window.GUEST_CONTENT = {
       host: "Alessandro · anfitrión de Nineteen Milano",
     },
     footer: "¡Feliz estancia en Nineteen Milano!",
-    langLabel: "FR", menuOpen: "Menú", menuClose: "Cerrar",
-    bottomNav: { home: "Inicio", house: "Casa", milan: "Milán", contact: "Contacto" },
+    langLabel: "FR",
   },
   fr: {
     meta: { title: "Nineteen Milano — Guide du voyageur", lang: "fr" },
@@ -272,8 +265,7 @@ window.GUEST_CONTENT = {
       host: "Alessandro · hôte de Nineteen Milano",
     },
     footer: "Bon séjour à Nineteen Milano !",
-    langLabel: "DE", menuOpen: "Menu", menuClose: "Fermer",
-    bottomNav: { home: "Accueil", house: "Maison", milan: "Milan", contact: "Contact" },
+    langLabel: "DE",
   },
   de: {
     meta: { title: "Nineteen Milano — Gästeguide", lang: "de" },
@@ -330,8 +322,7 @@ window.GUEST_CONTENT = {
       host: "Alessandro · Gastgeber von Nineteen Milano",
     },
     footer: "Einen schönen Aufenthalt im Nineteen Milano!",
-    langLabel: "IT", menuOpen: "Menü", menuClose: "Schließen",
-    bottomNav: { home: "Start", house: "Wohnung", milan: "Mailand", contact: "Kontakt" },
+    langLabel: "IT",
   },
 };
 
