@@ -48,6 +48,19 @@ body {
   z-index: 200;
   padding-top: var(--safe-top);
   background: transparent;
+  border-bottom: 1px solid transparent;
+  transition: background 0.3s, border-color 0.3s, box-shadow 0.3s;
+}
+
+/* Trasparente solo sopra l'hero: una volta superata (o su una schermata
+   senza hero) il testo scuro fluttuava a mani nude sulle card che
+   scorrevano sotto — con lo sfondo si stacca in modo pulito. */
+.site-header.is-scrolled,
+.site-header--solid {
+  background: rgba(245, 240, 232, 0.92);
+  backdrop-filter: blur(12px);
+  border-bottom-color: var(--border);
+  box-shadow: 0 4px 24px rgba(28, 25, 23, 0.06);
 }
 
 .header-inner {
