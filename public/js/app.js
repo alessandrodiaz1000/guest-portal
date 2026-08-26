@@ -520,10 +520,18 @@
   // "lang" non è tra le card di casa (SCREENS): ci si arriva solo dal
   // pulsante lingua in header, come le altre schermate ha solo la barra
   // "indietro" sopra al contenuto.
+  // Link mandati prima della riorganizzazione a card puntavano alle vecchie
+  // ancore dei capitoli (#arrival, #once-in, #useful, #checkin, #top): senza
+  // questa mappa un link già in mano a un ospite atterrerebbe in home invece
+  // che nella sezione giusta.
+  const LEGACY_ROUTES = { arrival: "checkin", "once-in": "wifi", useful: "milan", checkin: "checkin", top: "home" };
+
   function getRoute() {
     if (location.hash === "#screen/lang") return "lang";
     const m = /^#screen\/([a-z]+)$/.exec(location.hash);
-    return m && SCREENS[m[1]] ? m[1] : "home";
+    if (m && SCREENS[m[1]]) return m[1];
+    const legacyId = location.hash.replace(/^#/, "");
+    return LEGACY_ROUTES[legacyId] || "home";
   }
 
   function milanImageUrl(path) {
