@@ -70,6 +70,9 @@ body {
 .site-header--solid .logo { color: var(--text); }
 
 .lang-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
   margin-left: auto;
   border: 1px solid rgba(250, 250, 249, 0.35);
   background: rgba(28, 25, 23, 0.25);

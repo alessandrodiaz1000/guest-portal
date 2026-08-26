@@ -601,12 +601,18 @@
     headerInner.appendChild(el("a", { className: "logo", href: "#", text: "Nineteen Milano" }));
 
     // Mostra la lingua ATTUALE (non più la prossima del ciclo): apre la
-    // pagina "Lingua" invece di ciclare tra le 5 a furia di tap.
+    // pagina "Lingua" invece di ciclare tra le 5 a furia di tap. L'iconcina
+    // del globo c'è perché una sigla di due lettere da sola («IT», «EN»...)
+    // non si legge subito come "cambia lingua" — sembra un badge qualsiasi.
     const langBtn = el("button", {
       className: "lang-toggle",
       type: "button",
       "aria-label": "Change language",
-      text: lang.toUpperCase(),
+      html: '<svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" ' +
+        'stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' +
+        '<circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line>' +
+        '<path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>' +
+        `</svg><span>${lang.toUpperCase()}</span>`,
     });
     langBtn.addEventListener("click", () => { location.hash = "#screen/lang"; });
 
