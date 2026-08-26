@@ -352,16 +352,6 @@ body {
   border-block: 1px solid var(--border);
 }
 
-.section-block--contact {
-  background: var(--dark);
-  color: #fafaf9;
-}
-
-.section-block--contact .section-title,
-.section-block--contact .section-lead,
-.section-block--contact .host { color: #fafaf9; }
-.section-block--contact .section-lead { opacity: 0.85; }
-
 .section-title {
   font-family: var(--font-display);
   font-size: clamp(2rem, 5vw, 2.75rem);
@@ -381,30 +371,10 @@ body {
   padding: 4rem 0 1.5rem;
 }
 
-.gallery-intro--dark {
-  background: var(--dark);
-  color: #fafaf9;
-  padding-bottom: 1.5rem;
-}
-
-.gallery-intro--dark .section-title,
-.gallery-intro--dark .section-lead { color: #fafaf9; }
-.gallery-intro--dark .section-lead { opacity: 0.8; }
-.gallery-intro--dark .tip {
-  background: rgba(255, 255, 255, 0.06);
-  border-color: rgba(255, 255, 255, 0.1);
-}
-.gallery-intro--dark .tip p { color: rgba(250, 250, 249, 0.75); }
-
 /* ── Scroll galleries ── */
 .scroll-gallery {
   padding: 0 0 3rem;
   overflow: hidden;
-}
-
-.gallery-intro--dark + .scroll-gallery,
-.gallery-intro--dark .scroll-gallery {
-  background: var(--dark);
 }
 
 .scroll-gallery--milan {
@@ -580,11 +550,6 @@ body {
 
 .scroll-hint.is-hidden { opacity: 0; pointer-events: none; }
 
-.gallery-intro--dark + .scroll-gallery .scroll-hint,
-.scroll-gallery--milan .scroll-hint {
-  color: rgba(250, 250, 249, 0.45);
-}
-
 /* ── Reveal ── */
 .reveal {
   opacity: 0;
@@ -712,13 +677,6 @@ body {
 
 .btn--call:hover { background: #92400e; }
 
-.section-block--contact .btn--call {
-  background: #fafaf9;
-  color: var(--text);
-}
-
-.section-block--contact .btn--call:hover { background: var(--accent-soft); color: var(--text); }
-
 .btn:active { transform: scale(0.98); }
 
 .btn:hover { background: #44403c; }
@@ -741,15 +699,6 @@ body {
 .parking-item p { margin: 0; color: var(--muted); }
 
 /* Directions — interactive route planner */
-.section-block--directions {
-  background: linear-gradient(165deg, #1c1917 0%, #292524 100%);
-  color: #fafaf9;
-}
-
-.section-block--directions .section-title,
-.section-block--directions .section-lead { color: #fafaf9; }
-.section-block--directions .section-lead { opacity: 0.8; }
-
 .route-tabs {
   display: flex;
   gap: 0.5rem;
@@ -766,10 +715,10 @@ body {
   flex: 0 0 auto;
   min-width: calc(33.333% - 0.35rem);
   padding: 0.75rem 0.85rem;
-  border: 1px solid rgba(255, 255, 255, 0.15);
+  border: 1px solid var(--border);
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.06);
-  color: rgba(250, 250, 249, 0.75);
+  background: var(--surface);
+  color: var(--muted);
   font-family: var(--font);
   font-size: 0.9375rem;
   font-weight: 500;
@@ -778,9 +727,9 @@ body {
 }
 
 .route-tab.is-active {
-  background: #fafaf9;
-  color: var(--text);
-  border-color: #fafaf9;
+  background: var(--accent);
+  color: #fff;
+  border-color: var(--accent);
 }
 
 .route-panel { display: none; }
@@ -797,7 +746,7 @@ body {
   font-weight: 500;
   letter-spacing: 0.04em;
   text-transform: uppercase;
-  color: rgba(250, 250, 249, 0.55);
+  color: var(--muted);
 }
 
 .route-track {
@@ -822,7 +771,7 @@ body {
   top: 2.5rem;
   bottom: 0;
   width: 2px;
-  background: rgba(255, 255, 255, 0.12);
+  background: var(--border);
 }
 
 .route-step__marker {
@@ -849,12 +798,12 @@ body {
 .route-badge--m4 { background: #0078be; }
 .route-badge--m3 { background: #ffc800; color: #1c1917; }
 .route-badge--tram { background: #16a34a; color: #fff; }
-.route-badge--train { background: rgba(255, 255, 255, 0.12); font-size: 1.125rem; }
-.route-badge--stop { background: transparent; color: rgba(250, 250, 249, 0.5); font-size: 1rem; }
-.route-badge--walk { background: rgba(255, 255, 255, 0.1); font-size: 1.125rem; }
-.route-badge--arrive { background: var(--accent); font-size: 1.125rem; }
+.route-badge--train { background: var(--accent-soft); color: var(--accent); font-size: 1.125rem; }
+.route-badge--stop { background: transparent; color: var(--muted); font-size: 1rem; }
+.route-badge--walk { background: var(--accent-soft); color: var(--accent); font-size: 1.125rem; }
+.route-badge--arrive { background: var(--accent); color: #fff; font-size: 1.125rem; }
 
-.route-step--highlight .route-step__title { color: #fef3c7; }
+.route-step--highlight .route-step__title { color: var(--accent); }
 
 .route-step__title {
   margin: 0 0 0.2rem;
@@ -866,11 +815,11 @@ body {
 .route-step__detail {
   margin: 0;
   font-size: 0.875rem;
-  color: rgba(250, 250, 249, 0.65);
+  color: var(--muted);
   line-height: 1.45;
 }
 
-.route-badge--bus { background: #ea580c; font-size: 1.125rem; }
+.route-badge--bus { background: #ea580c; color: #fff; font-size: 1.125rem; }
 
 /* Collapsible sections */
 .section-toggle,

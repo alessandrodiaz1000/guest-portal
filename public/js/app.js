@@ -134,7 +134,7 @@
 
   function renderDirectionsSection(lang) {
     const d = window.GUEST_LOCAL[lang].directions;
-    const section = el("section", { className: "section-block section-block--directions reveal", id: "directions" });
+    const section = el("section", { className: "section-block reveal", id: "directions" });
     const inner = el("div", { className: "container" });
     inner.appendChild(el("h2", { className: "section-title", text: d.title }));
     inner.appendChild(el("p", { className: "section-lead", text: d.lead }));
@@ -231,7 +231,7 @@
   }
 
   function renderContactSection(c) {
-    const section = el("section", { className: "section-block section-block--contact reveal", id: "contact" });
+    const section = el("section", { className: "section-block reveal", id: "contact" });
     const inner = el("div", { className: "container" });
     inner.appendChild(el("h2", { className: "section-title", text: c.contact.title }));
     inner.appendChild(el("p", { className: "section-lead", text: c.contact.lead }));
@@ -246,7 +246,7 @@
   }
 
   function renderMilanSection(c, lang) {
-    const section = el("section", { className: "gallery-intro gallery-intro--dark reveal", id: "milan" });
+    const section = el("section", { className: "gallery-intro reveal", id: "milan" });
     const inner = el("div", { className: "container" });
     inner.appendChild(el("h2", { className: "section-title", text: c.milan.title }));
     inner.appendChild(el("p", { className: "section-lead", text: c.milan.lead }));
