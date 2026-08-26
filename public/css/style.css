@@ -1446,6 +1446,13 @@ body.gp-locked { overflow: hidden; }
    barra è nel DOM. */
 body:has(.gp-bar) .site-header { top: var(--gp-bar-h, 2.6rem); }
 
+/* Tutto quello che si tiene a distanza dall'header fisso (--header-h: la
+   barra "torna alla home", il margine di scroll delle ancore, il padding
+   dell'hero) deve sapere che l'header è sceso di --gp-bar-h, non solo
+   l'header stesso — altrimenti quel contenuto riparte da dove l'header
+   stava PRIMA di scendere e ci finisce sotto. */
+body:has(.gp-bar) { --header-h: calc(3.25rem + var(--gp-bar-h, 2.6rem)); }
+
 /* Innesti dentro la guida (solo con token) */
 .gp-code-inline {
   display: flex; align-items: center; justify-content: space-between; gap: 1rem;
