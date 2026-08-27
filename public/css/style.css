@@ -1423,4 +1423,5 @@ body:has(.gp-bar) { --header-h: calc(3.25rem + var(--gp-bar-h, 2.6rem)); }
 }
 .gp-code-inline span { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.07em; color: var(--muted); }
 .gp-code-inline strong { font-size: 1.5rem; letter-spacing: 0.12em; font-variant-numeric: tabular-nums; }
+.gp-code-inline--attesa em { font-style: normal; font-size: 0.9rem; font-weight: 500; color: var(--muted); text-align: right; }
 .gp-eta-inline { margin-top: 0.9rem; font-size: 0.9rem; color: var(--muted); }

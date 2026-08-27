@@ -38,6 +38,7 @@
       sotto: "Grazie ancora per aver scelto Nineteen Milano. Abbiamo bisogno giusto di qualche informazione per procedere con il check-in.",
       istruzioni: "Vedi istruzioni di check-in",
       codice: "Codice di accesso", codiceNota: "Attivo dal giorno del check-in.",
+      codiceAttesa: "Comparirà qui il giorno prima del check-in.",
       eta: "A che ora arrivi?", etaSalva: "Salva orario", etaOk: "Orario salvato",
       doc: "Documenti d'identità",
       docNota: "Per adempiere alla legge italiana siamo obbligati a comunicare alla Questura i dati di ogni ospite che soggiornerà presso la struttura. Vi chiediamo gentilmente di caricare l'immagine di un documento di identità valido per ogni ospite. Grazie in anticipo.",
@@ -72,6 +73,7 @@
       sotto: "Thank you again for choosing Nineteen Milano. We just need a few details to get your check-in ready.",
       istruzioni: "See check-in instructions",
       codice: "Access code", codiceNota: "Active from your check-in day.",
+      codiceAttesa: "It will appear here the day before your check-in.",
       eta: "What time will you arrive?", etaSalva: "Save time", etaOk: "Time saved",
       doc: "Identity documents",
       docNota: "Italian law requires us to report the details of every guest staying at the property to the police. Please upload a photo of a valid ID for each guest. Thank you in advance.",
@@ -106,6 +108,7 @@
       sotto: "Gracias de nuevo por elegir Nineteen Milano. Solo necesitamos algunos datos para preparar tu entrada.",
       istruzioni: "Ver instrucciones de entrada",
       codice: "Código de acceso", codiceNota: "Activo desde el día de tu entrada.",
+      codiceAttesa: "Aparecerá aquí el día antes de tu entrada.",
       eta: "¿A qué hora llegas?", etaSalva: "Guardar hora", etaOk: "Hora guardada",
       doc: "Documentos de identidad",
       docNota: "La ley italiana nos obliga a comunicar a la policía los datos de cada huésped que se aloje en el alojamiento. Te pedimos amablemente que subas la imagen de un documento de identidad válido de cada huésped. Gracias de antemano.",
@@ -140,6 +143,7 @@
       sotto: "Merci encore d'avoir choisi Nineteen Milano. Nous avons juste besoin de quelques informations pour préparer votre arrivée.",
       istruzioni: "Voir les instructions d'arrivée",
       codice: "Code d'accès", codiceNota: "Actif à partir du jour de votre arrivée.",
+      codiceAttesa: "Il apparaîtra ici la veille de votre arrivée.",
       eta: "À quelle heure arrivez-vous ?", etaSalva: "Enregistrer l'heure", etaOk: "Heure enregistrée",
       doc: "Pièces d'identité",
       docNota: "La loi italienne nous oblige à communiquer à la police les données de chaque voyageur séjournant dans le logement. Nous vous prions de bien vouloir télécharger l'image d'une pièce d'identité valide pour chaque voyageur. Merci d'avance.",
@@ -174,6 +178,7 @@
       sotto: "Vielen Dank, dass Sie sich für Nineteen Milano entschieden haben. Wir brauchen nur noch ein paar Angaben, um Ihren Check-in vorzubereiten.",
       istruzioni: "Check-in-Anleitung ansehen",
       codice: "Zugangscode", codiceNota: "Ab Ihrem Anreisetag aktiv.",
+      codiceAttesa: "Er erscheint hier am Tag vor Ihrer Anreise.",
       eta: "Wann kommen Sie an?", etaSalva: "Uhrzeit speichern", etaOk: "Uhrzeit gespeichert",
       doc: "Ausweisdokumente",
       docNota: "Das italienische Recht verpflichtet uns, die Daten jedes Gastes, der in der Unterkunft übernachtet, der Polizei zu melden. Bitte laden Sie das Bild eines gültigen Ausweisdokuments für jeden Gast hoch. Vielen Dank im Voraus.",
@@ -722,16 +727,22 @@
   }
 
   /** Il codice porta nella guida esiste SOLO con il token: la versione pubblica
-   *  resta senza, come deciso. */
+   *  resta senza, come deciso. Prima del giorno-1 dal check-in il Mini manda
+   *  `codiceInAttesa` invece del codice vero (guest_server._payload_ospite):
+   *  qui si mostra un messaggio d'attesa al posto del codice, non si sparisce
+   *  la sezione, altrimenti l'ospite non sa che il codice arriverà. */
   function codiceNellaGuida() {
-    if (!dati || !dati.codice) return;
+    if (!dati || (!dati.codice && !dati.codiceInAttesa)) return;
     // Il passo "il codice ti è stato mandato su Airbnb" non ha più senso quando
-    // il codice è scritto qui sopra: si toglie.
+    // il codice (o l'attesa) è scritto qui sopra: si toglie.
     var passo = document.querySelector('#checkin [data-code-step]');
     if (passo) passo.remove();
-    inserisciInCheckin(el("div", { className: "gp-code-inline" }, [
+    var attesa = !dati.codice;
+    inserisciInCheckin(el("div", {
+      className: "gp-code-inline" + (attesa ? " gp-code-inline--attesa" : ""),
+    }, [
       el("span", { text: t("codice") }),
-      el("strong", { text: dati.codice }),
+      el(attesa ? "em" : "strong", { text: attesa ? t("codiceAttesa") : dati.codice }),
     ]), "gp-code-inline");
   }
 
