@@ -39,6 +39,7 @@
       istruzioni: "Vedi istruzioni di check-in",
       codice: "Codice di accesso", codiceNota: "Attivo dal giorno del check-in.",
       codiceAttesa: "Comparirà qui il giorno prima del check-in.",
+      codiceKeybox: "Codice keybox",
       eta: "A che ora arrivi?", etaSalva: "Salva orario", etaOk: "Orario salvato",
       doc: "Documenti d'identità",
       docNota: "Per adempiere alla legge italiana siamo obbligati a comunicare alla Questura i dati di ogni ospite che soggiornerà presso la struttura. Vi chiediamo gentilmente di caricare l'immagine di un documento di identità valido per ogni ospite. Grazie in anticipo.",
@@ -74,6 +75,7 @@
       istruzioni: "See check-in instructions",
       codice: "Access code", codiceNota: "Active from your check-in day.",
       codiceAttesa: "It will appear here the day before your check-in.",
+      codiceKeybox: "Keybox code",
       eta: "What time will you arrive?", etaSalva: "Save time", etaOk: "Time saved",
       doc: "Identity documents",
       docNota: "Italian law requires us to report the details of every guest staying at the property to the police. Please upload a photo of a valid ID for each guest. Thank you in advance.",
@@ -109,6 +111,7 @@
       istruzioni: "Ver instrucciones de entrada",
       codice: "Código de acceso", codiceNota: "Activo desde el día de tu entrada.",
       codiceAttesa: "Aparecerá aquí el día antes de tu entrada.",
+      codiceKeybox: "Código de la keybox",
       eta: "¿A qué hora llegas?", etaSalva: "Guardar hora", etaOk: "Hora guardada",
       doc: "Documentos de identidad",
       docNota: "La ley italiana nos obliga a comunicar a la policía los datos de cada huésped que se aloje en el alojamiento. Te pedimos amablemente que subas la imagen de un documento de identidad válido de cada huésped. Gracias de antemano.",
@@ -144,6 +147,7 @@
       istruzioni: "Voir les instructions d'arrivée",
       codice: "Code d'accès", codiceNota: "Actif à partir du jour de votre arrivée.",
       codiceAttesa: "Il apparaîtra ici la veille de votre arrivée.",
+      codiceKeybox: "Code de la keybox",
       eta: "À quelle heure arrivez-vous ?", etaSalva: "Enregistrer l'heure", etaOk: "Heure enregistrée",
       doc: "Pièces d'identité",
       docNota: "La loi italienne nous oblige à communiquer à la police les données de chaque voyageur séjournant dans le logement. Nous vous prions de bien vouloir télécharger l'image d'une pièce d'identité valide pour chaque voyageur. Merci d'avance.",
@@ -179,6 +183,7 @@
       istruzioni: "Check-in-Anleitung ansehen",
       codice: "Zugangscode", codiceNota: "Ab Ihrem Anreisetag aktiv.",
       codiceAttesa: "Er erscheint hier am Tag vor Ihrer Anreise.",
+      codiceKeybox: "Keybox-Code",
       eta: "Wann kommen Sie an?", etaSalva: "Uhrzeit speichern", etaOk: "Uhrzeit gespeichert",
       doc: "Ausweisdokumente",
       docNota: "Das italienische Recht verpflichtet uns, die Daten jedes Gastes, der in der Unterkunft übernachtet, der Polizei zu melden. Bitte laden Sie das Bild eines gültigen Ausweisdokuments für jeden Gast hoch. Vielen Dank im Voraus.",
@@ -206,6 +211,54 @@
       giu: "Wir können Ihre Daten nicht laden. Schreiben Sie uns über Airbnb oder Booking, oder per WhatsApp an {tel}.",
       scaduto: "Dieser Link ist nicht mehr aktiv.",
       etaInGuida: "Sie haben uns <strong>{eta}</strong> als Ankunftszeit genannt.",
+    },
+  };
+
+  /** Istruzioni di check-in per chi entra con la keybox invece del tastierino:
+   *  sostituiscono per intero i passi e il checkout della sezione #checkin
+   *  (vedi metodoCheckinNellaGuida). Esistono SOLO qui, non in content.js: la
+   *  guida pubblica senza token non sa nulla della keybox, come per il codice
+   *  (vedi codiceNellaGuida). */
+  var KEYBOX_CHECKIN = {
+    it: {
+      steps: [
+        "Arrivate a Viale Monte Nero 19. La <strong>keybox</strong> è agganciata al cartello davanti al portone, a destra della fermata del tram.",
+        "Apritela con il codice qui sotto: dentro trovate due chiavi — <strong>nera</strong> per il portone, <strong>blu</strong> per la porta d'ingresso.",
+        "Aprite il portone con la chiave nera. Salite al <strong>4° piano</strong>, uscendo dall'ascensore girate a destra: aprite la porta dell'appartamento con la chiave blu.",
+      ],
+      checkout: "Check-out entro le <strong>10:00</strong>. Rimettete <strong>entrambe le chiavi</strong> nella keybox e richiudetela con lo stesso codice. Spegnete luci, aria condizionata e TV.",
+    },
+    en: {
+      steps: [
+        "Arrive at Viale Monte Nero 19. The <strong>keybox</strong> is attached to the sign in front of the main door, to the right of the tram stop.",
+        "Open it with the code below: inside you'll find two keys — <strong>black</strong> for the main door, <strong>blue</strong> for the apartment door.",
+        "Open the main door with the black key. Go up to the <strong>4th floor</strong>; coming out of the lift, turn right and open the apartment door with the blue key.",
+      ],
+      checkout: "Check-out by <strong>10:00 AM</strong>. Put <strong>both keys</strong> back in the keybox and lock it with the same code. Turn off the lights, air conditioning and TV.",
+    },
+    es: {
+      steps: [
+        "Llegad a Viale Monte Nero 19. La <strong>keybox</strong> está enganchada al cartel delante del portón, a la derecha de la parada del tranvía.",
+        "Ábrela con el código de abajo: dentro encontraréis dos llaves — <strong>negra</strong> para el portón, <strong>azul</strong> para la puerta de entrada.",
+        "Abrid el portón con la llave negra. Subid al <strong>4º piso</strong>; al salir del ascensor girad a la derecha y abrid la puerta del apartamento con la llave azul.",
+      ],
+      checkout: "Salida antes de las <strong>10:00</strong>. Devolved <strong>ambas llaves</strong> a la keybox y cerradla con el mismo código. Apagad las luces, el aire acondicionado y la TV.",
+    },
+    fr: {
+      steps: [
+        "Arrivez au Viale Monte Nero 19. La <strong>keybox</strong> est accrochée au panneau devant le portail, à droite de l'arrêt de tram.",
+        "Ouvrez-la avec le code ci-dessous : à l'intérieur, deux clés — <strong>noire</strong> pour le portail, <strong>bleue</strong> pour la porte d'entrée.",
+        "Ouvrez le portail avec la clé noire. Montez au <strong>4e étage</strong> ; en sortant de l'ascenseur, tournez à droite et ouvrez la porte de l'appartement avec la clé bleue.",
+      ],
+      checkout: "Départ avant <strong>10h00</strong>. Remettez <strong>les deux clés</strong> dans la keybox et refermez-la avec le même code. Éteignez les lumières, la climatisation et la télévision.",
+    },
+    de: {
+      steps: [
+        "Kommen Sie zur Viale Monte Nero 19. Die <strong>Keybox</strong> hängt am Schild vor dem Haustor, rechts von der Straßenbahnhaltestelle.",
+        "Öffnen Sie sie mit dem Code unten: darin finden Sie zwei Schlüssel — <strong>schwarz</strong> für das Haustor, <strong>blau</strong> für die Wohnungstür.",
+        "Öffnen Sie das Haustor mit dem schwarzen Schlüssel. Gehen Sie in den <strong>4. Stock</strong>; aus dem Aufzug kommend rechts abbiegen und die Wohnungstür mit dem blauen Schlüssel öffnen.",
+      ],
+      checkout: "Abreise bis <strong>10:00 Uhr</strong>. Legen Sie <strong>beide Schlüssel</strong> zurück in die Keybox und schließen Sie sie mit demselben Code ab. Schalten Sie Licht, Klimaanlage und Fernseher aus.",
     },
   };
 
@@ -738,12 +791,32 @@
     var passo = document.querySelector('#checkin [data-code-step]');
     if (passo) passo.remove();
     var attesa = !dati.codice;
+    var etichetta = dati.metodoCheckin === "keybox" ? t("codiceKeybox") : t("codice");
     inserisciInCheckin(el("div", {
       className: "gp-code-inline" + (attesa ? " gp-code-inline--attesa" : ""),
     }, [
-      el("span", { text: t("codice") }),
+      el("span", { text: etichetta }),
       el(attesa ? "em" : "strong", { text: attesa ? t("codiceAttesa") : dati.codice }),
     ]), "gp-code-inline");
+  }
+
+  /** Con la keybox i passi e il checkout di app.js (pensati per il tastierino:
+   *  citofono, tastierino sulla porta) sono sbagliati per intero, non solo il
+   *  codice: si sostituiscono con la sequenza vera (keybox → 2 chiavi → portone
+   *  → porta). Sempre un rebuild completo (mai un patch parziale): la sezione
+   *  #checkin viene ridisegnata da zero da app.js a ogni cambio lingua, quindi
+   *  qui si riscrive sempre tutto, non serve un guard di idempotenza. */
+  function metodoCheckinNellaGuida() {
+    if (!dati || dati.metodoCheckin !== "keybox") return;
+    var passi = (KEYBOX_CHECKIN[lang] || KEYBOX_CHECKIN.en).steps;
+    var checkoutTesto = (KEYBOX_CHECKIN[lang] || KEYBOX_CHECKIN.en).checkout;
+    var ol = document.querySelector("#checkin ol.steps");
+    if (ol) {
+      ol.innerHTML = "";
+      passi.forEach(function (html) { ol.appendChild(el("li", { html: html })); });
+    }
+    var checkoutP = document.querySelector("#checkin .subcard p");
+    if (checkoutP) checkoutP.innerHTML = checkoutTesto;
   }
 
   function pulisci() {
@@ -788,6 +861,7 @@
     else if (dati.imposta && dati.imposta.daPagare) document.body.appendChild(barraPagamento());
     misuraBarra();
 
+    metodoCheckinNellaGuida();
     codiceNellaGuida();
     etaNellaGuida();
   }
