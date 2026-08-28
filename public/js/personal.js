@@ -38,6 +38,7 @@
       sotto: "Grazie ancora per aver scelto Nineteen Milano. Abbiamo bisogno giusto di qualche informazione per procedere con il check-in.",
       istruzioni: "Vedi istruzioni di check-in",
       guidaGenerale: "Vedi la guida completa",
+      tornaScheda: "Torna alla tua pagina",
       codice: "Codice di accesso", codiceNota: "Attivo dal giorno del check-in.",
       codiceAttesa: "Comparirà qui il giorno prima del check-in.",
       codiceKeybox: "Codice keybox",
@@ -75,6 +76,7 @@
       sotto: "Thank you again for choosing Nineteen Milano. We just need a few details to get your check-in ready.",
       istruzioni: "See check-in instructions",
       guidaGenerale: "See the full guide",
+      tornaScheda: "Back to your page",
       codice: "Access code", codiceNota: "Active from your check-in day.",
       codiceAttesa: "It will appear here the day before your check-in.",
       codiceKeybox: "Keybox code",
@@ -112,6 +114,7 @@
       sotto: "Gracias de nuevo por elegir Nineteen Milano. Solo necesitamos algunos datos para preparar tu entrada.",
       istruzioni: "Ver instrucciones de entrada",
       guidaGenerale: "Ver la guía completa",
+      tornaScheda: "Volver a tu página",
       codice: "Código de acceso", codiceNota: "Activo desde el día de tu entrada.",
       codiceAttesa: "Aparecerá aquí el día antes de tu entrada.",
       codiceKeybox: "Código de la keybox",
@@ -149,6 +152,7 @@
       sotto: "Merci encore d'avoir choisi Nineteen Milano. Nous avons juste besoin de quelques informations pour préparer votre arrivée.",
       istruzioni: "Voir les instructions d'arrivée",
       guidaGenerale: "Voir le guide complet",
+      tornaScheda: "Retour à votre page",
       codice: "Code d'accès", codiceNota: "Actif à partir du jour de votre arrivée.",
       codiceAttesa: "Il apparaîtra ici la veille de votre arrivée.",
       codiceKeybox: "Code de la keybox",
@@ -186,6 +190,7 @@
       sotto: "Vielen Dank, dass Sie sich für Nineteen Milano entschieden haben. Wir brauchen nur noch ein paar Angaben, um Ihren Check-in vorzubereiten.",
       istruzioni: "Check-in-Anleitung ansehen",
       guidaGenerale: "Ganzen Guide ansehen",
+      tornaScheda: "Zurück zu Ihrer Seite",
       codice: "Zugangscode", codiceNota: "Ab Ihrem Anreisetag aktiv.",
       codiceAttesa: "Er erscheint hier am Tag vor Ihrer Anreise.",
       codiceKeybox: "Keybox-Code",
@@ -822,6 +827,33 @@
     ]), "gp-code-inline");
   }
 
+  /** «Torna alla home» in cima alla schermata check-in (app.js/renderScreenBack)
+   *  è pensato per la guida pubblica: da lì un ospite ci arriva sempre dalla
+   *  card grid, quindi tornare in home è corretto. Ma con un token il check-in
+   *  si raggiunge quasi sempre dal bottone primario sulla pagina personale
+   *  (bottoneIstruzioni): "indietro" deve riportare lì, non alla home generica,
+   *  altrimenti l'ospite perde il filo di quello che stava facendo (orario,
+   *  documenti). Scoped alla sola schermata check-in — `#checkin` esiste solo
+   *  lì — non alle altre card raggiunte dalla home, dove "indietro" resta
+   *  giusto così com'è. `dataset.gpBack` come guardia: `tornaAllaScheda()`
+   *  (bottone "Completa" della barra) richiama `disegna()` SENZA che app.js
+   *  abbia ricostruito il DOM, quindi lo stesso nodo <a> potrebbe passare di
+   *  qui più volte — senza il flag si accumulerebbero listener duplicati. */
+  function backAllaSchedaNelCheckin() {
+    if (!dati || !document.getElementById("checkin")) return;
+    var link = document.querySelector(".screen-back__link");
+    if (!link || link.dataset.gpBack) return;
+    link.dataset.gpBack = "1";
+    var span = link.querySelector("span");
+    if (span) span.textContent = t("tornaScheda");
+    link.addEventListener("click", function (ev) {
+      ev.preventDefault();
+      guidaAperta = false;
+      vuoleScheda = true;
+      disegna();
+    });
+  }
+
   /** Con la keybox i passi e il checkout di app.js (pensati per il tastierino:
    *  citofono, tastierino sulla porta) sono sbagliati per intero, non solo il
    *  codice: si sostituiscono con la sequenza vera (keybox → 2 chiavi → portone
@@ -886,6 +918,7 @@
     metodoCheckinNellaGuida();
     codiceNellaGuida();
     etaNellaGuida();
+    backAllaSchedaNelCheckin();
   }
 
   // La guida si ridisegna a ogni cambio lingua: riattacchiamoci sopra.
