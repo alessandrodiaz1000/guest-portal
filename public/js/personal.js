@@ -37,6 +37,7 @@
       benvenuto: "Benvenuto", benvenutoM: "Benvenuto", benvenutoF: "Benvenuta", benvenutoN: "Ciao",
       sotto: "Grazie ancora per aver scelto Nineteen Milano. Abbiamo bisogno giusto di qualche informazione per procedere con il check-in.",
       istruzioni: "Vedi istruzioni di check-in",
+      guidaGenerale: "Vedi la guida completa",
       codice: "Codice di accesso", codiceNota: "Attivo dal giorno del check-in.",
       codiceAttesa: "Comparirà qui il giorno prima del check-in.",
       codiceKeybox: "Codice keybox",
@@ -73,6 +74,7 @@
       benvenuto: "Welcome",
       sotto: "Thank you again for choosing Nineteen Milano. We just need a few details to get your check-in ready.",
       istruzioni: "See check-in instructions",
+      guidaGenerale: "See the full guide",
       codice: "Access code", codiceNota: "Active from your check-in day.",
       codiceAttesa: "It will appear here the day before your check-in.",
       codiceKeybox: "Keybox code",
@@ -109,6 +111,7 @@
       benvenuto: "Bienvenido", benvenutoM: "Bienvenido", benvenutoF: "Bienvenida", benvenutoN: "Hola",
       sotto: "Gracias de nuevo por elegir Nineteen Milano. Solo necesitamos algunos datos para preparar tu entrada.",
       istruzioni: "Ver instrucciones de entrada",
+      guidaGenerale: "Ver la guía completa",
       codice: "Código de acceso", codiceNota: "Activo desde el día de tu entrada.",
       codiceAttesa: "Aparecerá aquí el día antes de tu entrada.",
       codiceKeybox: "Código de la keybox",
@@ -145,6 +148,7 @@
       benvenuto: "Bienvenue",
       sotto: "Merci encore d'avoir choisi Nineteen Milano. Nous avons juste besoin de quelques informations pour préparer votre arrivée.",
       istruzioni: "Voir les instructions d'arrivée",
+      guidaGenerale: "Voir le guide complet",
       codice: "Code d'accès", codiceNota: "Actif à partir du jour de votre arrivée.",
       codiceAttesa: "Il apparaîtra ici la veille de votre arrivée.",
       codiceKeybox: "Code de la keybox",
@@ -181,6 +185,7 @@
       benvenuto: "Willkommen",
       sotto: "Vielen Dank, dass Sie sich für Nineteen Milano entschieden haben. Wir brauchen nur noch ein paar Angaben, um Ihren Check-in vorzubereiten.",
       istruzioni: "Check-in-Anleitung ansehen",
+      guidaGenerale: "Ganzen Guide ansehen",
       codice: "Zugangscode", codiceNota: "Ab Ihrem Anreisetag aktiv.",
       codiceAttesa: "Er erscheint hier am Tag vor Ihrer Anreise.",
       codiceKeybox: "Keybox-Code",
@@ -435,6 +440,7 @@
     function passo(f) {
       var meno = el("button", { className: "gp-passo", type: "button", text: "−",
                                 "aria-label": t("docMeno") });
+      var valore = el("span", { className: "gp-passo-val", text: String(f.n) });
       var piu = el("button", { className: "gp-passo", type: "button", text: "+",
                                "aria-label": t("docPiu") });
       meno.disabled = f.n <= 1;
@@ -445,7 +451,7 @@
       piu.addEventListener("click", function () {
         if (f.n < 6) { f.n++; f.corretto = true; ridisegna(); }
       });
-      return el("div", { className: "gp-passi" }, [meno, piu]);
+      return el("div", { className: "gp-passi" }, [meno, valore, piu]);
     }
 
     function riga(f) {
@@ -692,11 +698,9 @@
   // ── stati ──────────────────────────────────────────────────────────────
   /** Manda alla schermata check-in della guida, dove `codiceNellaGuida()` ha già
    *  innestato il codice d'accesso. È lì che il codice serve — davanti alla
-   *  porta — non in cima a un modulo da compilare. Sostituisce anche il vecchio
-   *  link «vai direttamente alla guida»: due uscite verso lo stesso posto, una
-   *  sotto l'altra, erano solo rumore. Dalla home a card il check-in è una
-   *  schermata a sé (#screen/checkin), non più una sezione sempre in pagina:
-   *  ci si naviga via hash invece di fare scrollIntoView. */
+   *  porta — non in cima a un modulo da compilare. Dalla home a card il
+   *  check-in è una schermata a sé (#screen/checkin), non più una sezione
+   *  sempre in pagina: ci si naviga via hash invece di fare scrollIntoView. */
   function bottoneIstruzioni() {
     var b = el("button", { className: "gp-btn gp-istruzioni", type: "button",
                            text: t("istruzioni") });
@@ -709,17 +713,35 @@
     return b;
   }
 
+  /** Seconda uscita dall'overlay, verso la home della guida (card WiFi,
+   *  dintorni, Milano…), non solo verso il check-in: un ospite che vuole
+   *  guardare il WiFi o come arrivare non deve passare per forza dal
+   *  check-in per trovarla. Hash vuoto = home, vedi getRoute() in app.js. */
+  function bottoneGuidaGenerale() {
+    var b = el("button", { className: "gp-btn gp-btn--ghost gp-guida-generale", type: "button",
+                           text: t("guidaGenerale") });
+    b.addEventListener("click", function () {
+      guidaAperta = true;
+      vuoleScheda = false;
+      disegna();
+      location.hash = "";
+    });
+    return b;
+  }
+
   function overlay() {
     // Imposta in cima: è il primo pensiero dell'ospite quando ha capito che
     // c'è qualcosa da pagare, e lasciarla in fondo alla lista di richieste
     // dava l'impressione di doverla scoprire. Poi quello che chiediamo noi
-    // (orario, documenti), poi la via d'uscita verso la guida. Il codice
-    // d'accesso non sta più qui.
+    // (orario, documenti), poi le due vie d'uscita verso la guida — check-in
+    // in primo piano (è il motivo per cui la maggior parte apre il link),
+    // guida generale come opzione secondaria accanto. Il codice d'accesso
+    // non sta più qui.
     var kids = [
       el("h2", { text: saluto() }),
       el("p", { className: "gp-lead", text: t("sotto") }),
       bloccoImposta(), bloccoEta(), bloccoDocumenti(),
-      bottoneIstruzioni(),
+      el("div", { className: "gp-uscite" }, [bottoneIstruzioni(), bottoneGuidaGenerale()]),
     ];
     return el("div", { className: "gp-overlay", id: "gp-overlay" },
       [el("div", { className: "gp-overlay-inner" }, kids)]);

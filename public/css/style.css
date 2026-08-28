@@ -1319,15 +1319,17 @@ body.gp-locked { overflow: hidden; }
 .gp-foto-n { font-size: 0.8rem; font-weight: 600; color: var(--accent); }
 .gp-foto-n--wait { color: var(--muted); font-weight: 400; }
 
-/* Il ± sul conteggio. 44px di lato: sotto quella misura su un telefono si
-   sbaglia bersaglio, ed è un bottone che si preme di fretta. */
-.gp-passi { display: flex; gap: 0.25rem; flex: 0 0 auto; }
+/* Il ± sul conteggio, col numero che cambia visibile IN MEZZO (− 2 +), non
+   solo nella riga sopra: un ospite di fretta deve vedere cosa sta toccando
+   senza spostare lo sguardo. 44px di lato, non 34: sotto quella misura su un
+   telefono si sbaglia bersaglio, ed è un bottone che si preme di fretta. */
+.gp-passi { display: flex; align-items: center; gap: 0.4rem; flex: 0 0 auto; }
 
 .gp-passo {
-  width: 34px;
-  height: 34px;
+  width: 44px;
+  height: 44px;
   font: inherit;
-  font-size: 1.05rem;
+  font-size: 1.2rem;
   line-height: 1;
   color: var(--text);
   background: var(--bg);
@@ -1337,6 +1339,14 @@ body.gp-locked { overflow: hidden; }
 }
 
 .gp-passo:disabled { opacity: 0.35; cursor: default; }
+
+.gp-passo-val {
+  min-width: 1.4rem;
+  text-align: center;
+  font-weight: 700;
+  font-size: 1.05rem;
+  font-variant-numeric: tabular-nums;
+}
 
 .gp-quante { margin: 0.1rem 0 0; font-size: 0.78rem; }
 
@@ -1360,16 +1370,20 @@ body.gp-locked { overflow: hidden; }
   white-space: nowrap;
 }
 
-/* Il bottone grande in fondo alla schermata personale: unica via verso la
-   guida, ed è anche l'unico posto dove l'ospite trova il codice d'accesso. */
+/* Le due vie d'uscita in fondo alla schermata personale: check-in (primaria,
+   scura) e guida generale (secondaria, ghost) affiancate. È anche l'unico
+   posto dove l'ospite trova il codice d'accesso, quindi il check-in resta il
+   bottone che si nota di più. */
+.gp-uscite { display: flex; gap: 0.6rem; margin-top: 1.6rem; }
+.gp-uscite .gp-btn { margin-top: 0; flex: 1; }
 .gp-istruzioni {
-  margin-top: 1.6rem;
   padding: 1.05rem;
   font-size: 1rem;
   background: var(--surface);
   color: var(--text);
   border: 1px solid var(--text);
 }
+.gp-guida-generale { padding: 1.05rem; font-size: 1rem; }
 
 /* Barra sticky: resta finché i dati non ci sono (o l'imposta non è confermata) */
 .gp-bar {
